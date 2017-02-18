@@ -3,33 +3,41 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/mn_maps"
+            android:icon="@drawable/ic_map_black_48dp"
+            android:title="Bản đồ" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/mn_list"
+            android:icon="@drawable/ic_list_point"
+            android:title="Hành trình đã lưu" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/mn_setup"
+            android:icon="@drawable/ic_setup"
+            android:title="Cài đặt tiện ích" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/mn_change_ui"
+            android:icon="@drawable/ic_change_ui"
+            android:title="Thay đổi giao diện" />
     </group>
-
-    <item android:title="Communicate">
+    <item android:title="Ngoài ra">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/mn_feedback"
+                android:icon="@drawable/ic_danhngon"
+                android:title="Ý kiến phản hồi" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/mn_vote"
+                android:icon="@drawable/ic_vote"
+                android:title="Đánh giá ứng dụng" />
+            <item
+                android:id="@+id/mn_share"
+                android:icon="@drawable/ic_share"
+                android:title="Chia sẻ ứng dụng" />
+            <item
+                android:id="@+id/mn_more_app"
+                android:icon="@drawable/ic_moreapp"
+                android:title="Ứng dụng khác" />
+
         </menu>
     </item>
 

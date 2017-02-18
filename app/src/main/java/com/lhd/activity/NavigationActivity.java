@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.lhd.fragment.MapFm;
 import com.lhd.myroute.R;
 
+import duong.ChucNangPhu;
 import duong.maps.BanDo;
 
 public class NavigationActivity extends AppCompatActivity
@@ -26,6 +27,7 @@ public class NavigationActivity extends AppCompatActivity
     private BanDo banDo;
     private Location myLoction;
     private int sizeCamera=12;
+    private ChucNangPhu chucNangPhu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class NavigationActivity extends AppCompatActivity
      * khởi tạo các đối tượng trong app
      */
     private void initObject() {
+         chucNangPhu=new ChucNangPhu();
         mapFragment=new MapFm();
         mapFragment.setAsyn(this);
          banDo=new BanDo();
@@ -104,18 +107,24 @@ public class NavigationActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera)
+        if (id == R.id.mn_maps)
             setMapFragment();
-        else if (id == R.id.nav_gallery) {
+        else if (id == R.id.mn_list) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.mn_setup) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.mn_change_ui) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.mn_vote)
+            chucNangPhu.danhGiaApp(this,getPackageName());
+         else if (id == R.id.mn_feedback) {
+            chucNangPhu.yKenPhanHoi(this,"","");
+        }
+        else if (id == R.id.mn_more_app) {
+            chucNangPhu.moreApp(this);
+        }
+        else if (id == R.id.mn_share) {
+            chucNangPhu.chiaSeApp(this,getString(R.string.app_name),getPackageName());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
