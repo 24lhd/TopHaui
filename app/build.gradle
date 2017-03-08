@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
-    defaultConfig {
-        applicationId "com.lhd.myroute"
+    defaultConfig{
+        applicationId "com.lhd.tophaui"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -20,16 +20,20 @@ android {
         }
     }
 }
-
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support:design:25.1.1'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.google.android.gms:play-services:10.2.0'
-    testCompile 'junit:junit:4.12'
+    compile 'com.github.mancj:SlideUp-Android:2.2.1'
+    compile 'org.apache.httpcomponents:httpclient:4.5.3'
     compile project(':Duong')
+    compile files('libs/jsoup-1.10.2.jar')
+    compile 'com.google.code.gson:gson:2.2.4'
 }

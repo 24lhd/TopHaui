@@ -1,50 +1,89 @@
 package com.lhd.activity;
 
-import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.lhd.fragment.MapFm;
-import com.lhd.myroute.R;
+import com.google.android.gms.maps.model.Marker;
+import com.lhd.tophaui.R;
+import com.mancj.slideup.SlideUp;
+
+import java.util.ArrayList;
 
 import duong.ChucNangPhu;
-import duong.maps.BanDo;
 
-public class NavigationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener ,OnMapReadyCallback,GoogleMap.OnMyLocationChangeListener {
-    public static final String MAP_FRAGMENT = "map_fragment";
-    private GoogleMap mMap;
-    private MapFm mapFragment;
-    private BanDo banDo;
-    private Location myLoction;
-    private int sizeCamera=12;
+public class NavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ChucNangPhu chucNangPhu;
+    private ArrayList<Marker> markerSelects;
+    private View sliderView;
+    private SlideUp slideUp;
+    FloatingActionButton fab;
+    private TabLayout tabUI;
+    private int tabUISelect;
+    private boolean isShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         intiView();
+    }
 
-//        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     /**
      * khởi tạo view ban đầu
      */
+
     private void intiView() {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isShow) showSlide();
+                else hideSlide();
+            }
+        });
+        slideUp = new SlideUp.Builder(sliderView)
+                .withListeners(new SlideUp.Listener() {
+                    @Override
+                    public void onSlide(float percent) {
+                    }
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE){
+                            fab.show();
+                        }
+                    }
+                })
+                .withStartGravity(Gravity.TOP)
+                .withLoggingEnabled(true)
+                .withStartState(SlideUp.State.HIDDEN)
+                .build();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isShow) showSlide();
+                else hideSlide();
+            }
+        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -56,14 +95,22 @@ public class NavigationActivity extends AppCompatActivity
 
     }
 
-    /**
-     * khởi tạo các đối tượng trong app
-     */
+    private void hideSlide() {
+        slideUp.hide();
+        fab.show();
+        isShow=false;
+    }
+
+    private void showSlide() {
+        isShow=true;
+        slideUp.show();
+        fab.hide();
+    }
+
+    private  AlertDialog alertDialog;
     private void initObject() {
-         chucNangPhu=new ChucNangPhu();
-        mapFragment=new MapFm();
-        mapFragment.setAsyn(this);
-         banDo=new BanDo();
+        chucNangPhu=new ChucNangPhu();
+        markerSelects=new ArrayList<>();
     }
 
     @Override
@@ -83,16 +130,6 @@ public class NavigationActivity extends AppCompatActivity
         return true;
     }
 
-    /**
-     * khi trả về 1 bản đồ thì cài đặt cơ bản bản đồ và set sự kiện lắng nghe GPS thay đổi
-     * @param googleMap
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        googleMap.setOnMyLocationChangeListener(this);
-        banDo.caiDatBanDo(mMap);
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -108,56 +145,26 @@ public class NavigationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.mn_maps)
-            setMapFragment();
-        else if (id == R.id.mn_list) {
+        {
 
+        }
+        else if (id == R.id.mn_list) {
         } else if (id == R.id.mn_setup) {
 
         } else if (id == R.id.mn_change_ui) {
+        } else if (id == R.id.mn_vote){
 
-        } else if (id == R.id.mn_vote)
-            chucNangPhu.danhGiaApp(this,getPackageName());
+        }
          else if (id == R.id.mn_feedback) {
-            chucNangPhu.yKenPhanHoi(this,"","");
         }
         else if (id == R.id.mn_more_app) {
-            chucNangPhu.moreApp(this);
         }
         else if (id == R.id.mn_share) {
-            chucNangPhu.chiaSeApp(this,getString(R.string.app_name),getPackageName());
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    /**
-     * hiện google map
-     */
-    private void setMapFragment() {
-        banDo.checkLocationIsEnable(this,"Bạn chưa bật vị trí","Bạn có muốn bật vị trí của mình");
-        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_fm,mapFragment);
-        transaction.commit();
-        diChuyenToiviTriCuaToi();
-    }
 
-    /**
-     * di chuyển tới vị trí hiện tại
-     */
-    private void diChuyenToiviTriCuaToi() {
-        banDo.diChuyenToiViTri(mMap,myLoction,sizeCamera);
-    }
 
-    /**
-     * khi vị trí thay đổi sẽ cập nhật vị trí hiện tại . nếu vị trí hiện tại bị null sẽ di chuyển tới vị trí đó
-     * @param location
-     */
-    @Override
-    public void onMyLocationChange(Location location) {
-        if (myLoction!=null) myLoction =location;
-        else{
-            myLoction=location;
-            banDo.diChuyenToiViTri(mMap,myLoction,sizeCamera);
-        }
-    }
 }

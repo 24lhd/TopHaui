@@ -1,25 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:id="@+id/toolbar_list_activity"
+                    android:layout_marginBottom="3dp"
+                    android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/margin_view"
+                            android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:gravity="left"
+                                    android:id="@+id/tb_title"
+                                    android:singleLine="true"
+                                    android:layout_gravity="left"
+                                    style="@style/TextAppearance.AppCompat.Title"
+                                    android:textColor="@color/md_white_1000"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:id="@+id/tb_text1"
+                                    android:gravity="left"
+                                    android:singleLine="true"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/md_white_1000"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:id="@+id/tb_text2"
+                                    android:singleLine="true"
+                                    android:gravity="left"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:layout_gravity="left"
+                                    android:textColor="@color/md_white_1000"
+                                    android:layout_height="wrap_content" />
+                        </LinearLayout>
+                        <View
+                            android:layout_width="1dp"
+                            android:background="@color/md_white_1000"
+                            android:layout_marginTop="3dp"
+                            android:layout_height="match_parent"></View>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/view_time"
+                            android:background="@drawable/selecter_image"
+                            android:layout_marginLeft="@dimen/margin_view"
+                            android:layout_marginRight="@dimen/margin_view"
+                            android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    style="@style/TextAppearance.AppCompat.Body2"
+                                    android:textColor="@color/md_white_1000"
+                                    android:gravity="center"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center"
+                                    android:id="@+id/tv_tiet_hientai"
+                                    android:layout_height="wrap_content" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    style="@style/TextAppearance.AppCompat.Body1"
+                                    android:id="@+id/tv_time_conlai"
+                                    android:layout_gravity="center"
+                                    android:textColor="@color/md_white_1000"
+                                    android:gravity="center"
+                                    android:layout_height="wrap_content" />
+                        </LinearLayout>
+                </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
 
-    <include
-        layout="@layout/app_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:id="@+id/tablayout_fa"
+            android:layout_height="wrap_content">
+                <android.support.design.widget.TabItem
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+                <android.support.design.widget.TabItem
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+                <android.support.design.widget.TabItem
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+                <android.support.design.widget.TabItem
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+                <android.support.design.widget.TabItem
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+                <android.support.design.widget.TabItem
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+        </android.support.design.widget.TabLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimaryDark"
+            android:id="@+id/view"
+            android:layout_height="1dp"></View>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <android.support.v4.view.ViewPager
+                    android:layout_width="match_parent"
+                    android:id="@+id/viewpager"
+                    android:layout_marginLeft="@dimen/margin_view"
+                    android:layout_marginRight="@dimen/margin_view"
+                    android:layout_height="match_parent">
+                </android.support.v4.view.ViewPager>
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/pg_loading_main"
+                    style="@android:style/Widget.Material.ProgressBar.Large"
+                    android:layout_height="wrap_content" />
+        </RelativeLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+</LinearLayout>
 
-</android.support.v4.widget.DrawerLayout>

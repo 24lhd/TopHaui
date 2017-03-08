@@ -5,6 +5,7 @@ import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -12,7 +13,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
 
 import java.io.File;
 
@@ -22,6 +26,15 @@ import java.io.File;
 
 public class ChucNangPhu {
     private AlertDialog.Builder builder;
+
+    /**
+     * trả về string json từ 1 đoói tượng java truyền vào
+     * @param o
+     */
+    public static String getJSONByObj(Object o) {
+        Gson gson = new Gson();
+        return gson.toJson(o);
+    }
 
     /**
      * Phương thức tải file .apk từ 1 url về máy và cài đặt khi đã tải xong
@@ -162,31 +175,40 @@ public class ChucNangPhu {
         }
     }
 
-    public void yKenPhanHoi(final Activity context, String s, String s1) {
-//        builder = new AlertDialog.Builder(context);
-//        View view=context.getLayoutInflater().inflate(R.layout.feedback_layout,null);
-//        final EditText editText= (EditText) view.findViewById(R.id.et_feedback);
-//        builder.setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                Intent i = new Intent(Intent.ACTION_SEND);
-//                i.setType("message/rfc822");
-//                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"gacongnghiep.sv@gmail.com"});
-//                i.putExtra(Intent.EXTRA_SUBJECT, "Phản hồi Gà Công Nghiệp");
-//                i.putExtra(Intent.EXTRA_TEXT   , editText.getText().toString());
-//                try {
-//                    context.startActivity(Intent.createChooser(i, "Send mail..."));
-//                } catch (ActivityNotFoundException ex) {
-//                    Toast.makeText(context, "Bạn chưa cài ứng dụng Emails.", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//        builder.setView(view);
+    /**
+     * gửi ý kiến phản hồi đế gmail
+     * @param context activity
+     * @param email địa chỉ mail
+     * @param content nội dung
+     * @param appName tên app
+     */
+    public void yKenPhanHoi(final Activity context, final String email, String content, final String appName) {
+        builder = new AlertDialog.Builder(context);
+        final EditText editText=new EditText(context);
+        builder.setTitle(content);
+        editText.setHint("Ý kiến đóng góp");
+        builder.setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
+                i.putExtra(Intent.EXTRA_SUBJECT, "Phản hồi "+appName);
+                i.putExtra(Intent.EXTRA_TEXT   , editText.getText().toString());
+                try {
+                    context.startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(context, "Bạn chưa cài ứng dụng Emails.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setView(editText);
+        builder.show();
     }
 }
