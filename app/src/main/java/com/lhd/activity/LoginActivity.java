@@ -94,12 +94,8 @@ public class LoginActivity extends Activity {
                     else tvError.setText("* Không có kêt nối Iternet!");
                     return;
                 }else if (msg.obj instanceof SinhVien){
-                    try {
-                        putToServer((SinhVien) msg.obj);
-                    } catch (Exception e) {}
-                    finally {
-                        goToUI((SinhVien) msg.obj);
-                    }
+                    goToUI((SinhVien) msg.obj);
+
                     return;
                 }
             }
@@ -139,12 +135,6 @@ public class LoginActivity extends Activity {
                 ChucNangPhu.showLog("postHTTP "+str);
             }
         }.start();
-
-    }
-
-
-    // đẩy 1 sinh viên lên server
-    private void putToServer(SinhVien sinhVien ) throws Exception{
 
     }
     @Override

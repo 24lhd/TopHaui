@@ -36,6 +36,11 @@
             android:textColor="@color/md_white_1000"
             android:gravity="center"
             android:layout_height="wrap_content"/>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

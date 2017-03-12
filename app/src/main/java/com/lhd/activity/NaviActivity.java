@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,13 +21,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.lhd.config.Config;
 import com.lhd.fm.FrameTopFragment;
+import com.lhd.obj.He;
+import com.lhd.obj.Nganh;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.TimeTask;
 import com.lhd.tophaui.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import duong.AppLog;
 import duong.ChucNangPhu;
+import duong.http.DuongHTTP;
 
 import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
@@ -39,7 +50,6 @@ public class NaviActivity extends AppCompatActivity
     public static final String SINH_VIEN="sinh vien";
     private static final String LOG_MSV = "log_msv";
     private static final String LOG_INFOR_SV = "info_sinh_vien";
-
     private PackageInfo info;
     private AppLog appLog;
     private String msv;
@@ -48,9 +58,12 @@ public class NaviActivity extends AppCompatActivity
     private TextView tvClassStudent;
     private TextView tietView;
     private LinearLayout layoutTime;
+    private String soLuotTruyCap;
+    private String soNguoiDung;
+    private boolean fail;
 
     /**
-     * KHỞI TẠO VIEW INTRO
+     * KHỞI TẠO VIEW INTRO và lấy dữ liệu veef heej vaf nganh
      * @param savedInstanceState
      */
     @Override
@@ -81,7 +94,6 @@ public class NaviActivity extends AppCompatActivity
         tietView= (TextView) headerLayout.findViewById(R.id.tv_tiet_hientai);
         timeView= (TextView) headerLayout.findViewById(R.id.tv_time_conlai);
         setContentViewHeaderNavi(sinhVien.getTen(),sinhVien.getLop());
-
         startTimeView();
     }
 
@@ -158,12 +170,69 @@ public class NaviActivity extends AppCompatActivity
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        (new Handler()).postDelayed(new Runnable() {
+        new AsyncTask<Void,Void,Void>(){
             @Override
-            public void run() {
+            protected Void doInBackground(Void... params) {
+                try {
+                    String jsonHes = (new DuongHTTP()).getHTTP(Config.GET_HE);
+                    String jsonNganhs = (new DuongHTTP()).getHTTP(Config.GET_NGANH);
+                    String jsonLuotTruyCap = (new DuongHTTP()).getHTTP(Config.GET_LUOT_TRUY_CAP);
+                    setNganhsAndHes(jsonNganhs,jsonHes,jsonLuotTruyCap);
+                } catch (Exception e) {}
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
                 checkLog();
             }
-        }, 2000);
+        }.execute();
+    }
+    private ArrayList<He> hes;
+    private ArrayList<Nganh> nganhs;
+    private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap) {
+        hes=new ArrayList<>();
+        this.fail=false;
+        nganhs=new ArrayList<>();
+        try {
+            JSONObject jsonObjectHes=new JSONObject(jsonHes);
+            int jsonObjectHesStatust= jsonObjectHes.getInt("status");
+            ChucNangPhu.showLog("jsonObjectHesStatust "+jsonObjectHesStatust);
+            if (jsonObjectHesStatust!=1){
+                this.fail=true;
+                return;
+            }
+            JSONArray jsonArrayHes=jsonObjectHes.getJSONArray("data");
+            for (int i = 0; i < jsonArrayHes.length(); i++) {
+                JSONObject jsonObject=jsonArrayHes.getJSONObject(i);
+                He he=new He(jsonObject.getString("mahe"),jsonObject.getString("tenhe"));
+                hes.add(he);
+                ChucNangPhu.showLog(he.toString());
+            }
+            JSONObject jsonObjectNganhs=new JSONObject(jsonNganhs);
+            int jsonObjectNganhsStatust=jsonObjectNganhs.getInt("status");
+            JSONArray jsonArrayNganhs=jsonObjectNganhs.getJSONArray("data");
+            for (int i = 0; i < jsonArrayNganhs.length(); i++) {
+                JSONObject jsonObject=jsonArrayNganhs.getJSONObject(i);
+               Nganh nganh=new Nganh(jsonObject.getString("manganh"));
+                nganhs.add(nganh);
+                ChucNangPhu.showLog(nganh.toString());
+            }
+
+            JSONObject jsonObjectLuotTruyCap=new JSONObject(jsonLuotTruyCap);
+            int jsonObjectLuotTruyCapStatust=jsonObjectLuotTruyCap.getInt("status");
+            JSONArray jsonArrayLuotTruyCap=jsonObjectLuotTruyCap.getJSONArray("data");
+            JSONObject jsonObject=jsonArrayLuotTruyCap.getJSONObject(0);
+            soLuotTruyCap=jsonObject.getString("soluot");
+            soNguoiDung=jsonObject.getString("nguoidadung");
+//            Toast.makeText(this,jsonObjectHes.getString("msg")+"\n"+jsonObjectNganhs.getString("msg"),Toast.LENGTH_SHORT).show();
+        } catch (JSONException e) {
+            ChucNangPhu.showLog("JSONException setNganhsAndHes");
+
+        }
+
+
     }
 
     @Override
@@ -189,18 +258,21 @@ public class NaviActivity extends AppCompatActivity
 
     /**
      * kiểm tra xem log đã có mã sinh viên hay chưa, chưa có thì chạy lân activity đăng nhập để nhập mã sinh viên
-     * nếu có rồi thì chạy giao diện chính
+     * nếu có rồi thì chạy giao diện chính và lấy dữ liệu sinh viên ở trong
      */
     private void checkLog() {
-        ChucNangPhu.showLog("equals msv "+msv);
-        ChucNangPhu.showLog("equals sv "+appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV));
-        if (msv!=null){
-            Gson gson=new Gson();
-            sinhVien=gson.fromJson(appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV),SinhVien.class);
-            ChucNangPhu.showLog("equals checkLogAPI" +sinhVien.toString());
-            checkLogAPI();
-        } else
-           startActivityLogin();
+        try{
+            String jsonSinhVien=appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV);
+            if (msv!=null&&jsonSinhVien!=null){
+                Gson gson=new Gson();
+                sinhVien=gson.fromJson(appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV),SinhVien.class);
+                checkLogAPI();
+            } else
+                startActivityLogin();
+        }catch (Exception e){
+            appLog.removeAll();
+        }
+
 
     }
 
@@ -259,4 +331,5 @@ public class NaviActivity extends AppCompatActivity
         transaction.replace(R.id.frame_fragment, frameTopFragment);
         transaction.commit();
     }
+
 }

@@ -31,7 +31,7 @@
             <item
                 android:id="@+id/mn_feedback"
                 android:icon="@drawable/ic_danhngon"
-                android:title="Ý kiến phản hồi" />
+                android:title="Thông tin phát triển" />
             <item
                 android:id="@+id/mn_vote"
                 android:icon="@drawable/ic_vote"

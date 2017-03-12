@@ -16,6 +16,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
 import static duong.ChucNangPhu.getJSONByObj;
@@ -108,6 +109,8 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                  * đọc thông tin từ sinh viên và lọc các dữ liệu và put lên server update
                  */
                 SinhVien sinhVien=parserSinhVien(msv,ten,lop,khoa,tl,nam);
+
+
                 return sinhVien;
             } catch (Exception e) {
                 Log.e("faker"," TaskQLCL IOException");
