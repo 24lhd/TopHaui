@@ -13,11 +13,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.lhd.config.Config;
 import com.lhd.obj.SinhVien;
-import com.lhd.task.HTTPGetSinhVien;
+import com.lhd.task.ParserSinhVien;
 import com.lhd.tophaui.R;
 
+import java.io.IOException;
+
+import duong.ChucNangPhu;
 import duong.DuongWindow;
+import duong.http.DuongHTTP;
 
 import static duong.Conections.isOnline;
 
@@ -31,6 +37,10 @@ public class LoginActivity extends Activity {
     private AppCompatButton processButton;
     private ProgressBar progressBar;
 
+    /**
+     * chạy lên giao diện
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,13 +77,14 @@ public class LoginActivity extends Activity {
     }
 
     /**
-     * chạy 1 luồng để lấy dữu liệu trên server và kiểm tra
+     * chạy 1 luồng để lấy dữu liệu trên server dttc và kiểm tra xem mã sinh viên đố có hay k
      * @param maSinhVien
      */
     public void getSV( String maSinhVien) {
         processButton.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        HTTPGetSinhVien httpGetSinhVien=new HTTPGetSinhVien(new Handler(){
+    tvError.setText("* Đợi mình tẹo...");
+        ParserSinhVien parserSinhVien=new ParserSinhVien(new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 if (msg.what==2){
@@ -83,7 +94,6 @@ public class LoginActivity extends Activity {
                     else tvError.setText("* Không có kêt nối Iternet!");
                     return;
                 }else if (msg.obj instanceof SinhVien){
-                    tvError.setText("* Đợi tẹo...");
                     try {
                         putToServer((SinhVien) msg.obj);
                     } catch (Exception e) {}
@@ -93,16 +103,47 @@ public class LoginActivity extends Activity {
                     return;
                 }
             }
-        });
-        httpGetSinhVien.execute(maSinhVien);
+        },this);
+        parserSinhVien.execute(maSinhVien);
     }
     private void goToUI(SinhVien sinhVien) {
-        Intent returnIntent = new Intent();
+        Intent returnIntent =getIntent();
         returnIntent.putExtra(NaviActivity.SINH_VIEN,sinhVien);
         setResult(Activity.RESULT_OK,returnIntent);
+        try {
+            postToServer(sinhVien);
+        } catch (Exception e) {
+           ChucNangPhu.showLog("goToUI "+e.getMessage());
+        }
         finish();
+        overridePendingTransition(R.anim.left_end, R.anim.right_end);
+
     }
-        // đẩy 1 sinh viên lên server
+
+    /**
+     * post thông tin của sinh viên lên server
+     * @param sinhVien
+     * @throws Exception
+     */
+    private void postToServer(final SinhVien sinhVien) throws Exception{
+        final Gson gson=new Gson();
+        final String str=gson.toJson(sinhVien);
+        new Thread(){
+            @Override
+            public void run() {//
+                try {
+                    (new DuongHTTP()).postHTTP(Config.POST_SINH_VIEN,str);// post len server
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ChucNangPhu.showLog("postHTTP "+str);
+            }
+        }.start();
+
+    }
+
+
+    // đẩy 1 sinh viên lên server
     private void putToServer(SinhVien sinhVien ) throws Exception{
 
     }

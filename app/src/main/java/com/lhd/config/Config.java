@@ -7,6 +7,11 @@ package com.lhd.config;
 public class Config {
     public static final String LINK_GET_INFOR_SV="http://localhost:3000/api/getsv/ma/";
     public static final String DATABASE_NAME="topcn";
+    /**
+     * lick post 1 sinh viên lên server
+     */
+    public static final String POST_SINH_VIEN = "https://topcongnghiep.herokuapp.com/sv/";
+
     public static String getLinkMonHocBatBuoc(String msv){
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-bat-buoc?action=p1&p=1&ps=500&exp=rownb&dir=1&s=" + msv;
     }

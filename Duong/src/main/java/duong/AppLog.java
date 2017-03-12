@@ -23,11 +23,15 @@ public class AppLog {
     }
     public String getValueByName(Context context,String logName,String name) {
         openLog(context,logName);
-        String values= preferences.getString(name,"");
+        String values= preferences.getString(name,null);
         return values;
     }
     public void removeAll() {
         editor.clear();
+        editor.commit();
+    }
+    public void removeByName(String key) {
+        editor.remove(key);
         editor.commit();
     }
 }

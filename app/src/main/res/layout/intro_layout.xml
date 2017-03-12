@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="256dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_app"
+            android:src="@drawable/logo_student"
             android:layout_height="256dp" />
         <TextView
             android:layout_width="match_parent"
