@@ -30,7 +30,7 @@
             android:paddingTop="@dimen/margin_view"
             android:text="Android Studio"
             android:textStyle="bold"
-            style="@style/TextAppearance.AppCompat.Title" />
+            style="@style/TextAppearance.AppCompat.Body2" />
 
         <TextView
             android:id="@+id/hd_name_class_student"

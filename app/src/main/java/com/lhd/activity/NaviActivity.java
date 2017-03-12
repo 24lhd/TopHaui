@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.lhd.fm.FrameTopFragment;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.TimeTask;
 import com.lhd.tophaui.R;
@@ -236,11 +237,26 @@ public class NaviActivity extends AppCompatActivity
             appLog.removeByName(LOG_MSV);
             appLog.removeByName(LOG_INFOR_SV);
             startActivityLogin();
-        }
-        else if (id == R.id.mn_list) {
-        }
+        } else if (id == R.id.mn_top_he)
+            setViewTopHe();
+        else if (id == R.id.mn_top_khoa)
+            setViewTopHe();
+        else if (id == R.id.mn_top_nganh)
+            setViewTopHe();
+        else if (id == R.id.mn_top_lop)
+            setViewTopHe();
+        else if (id == R.id.mn_top_he)
+            setViewTopHe();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setViewTopHe() {
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FrameTopFragment frameTopFragment=new FrameTopFragment();
+        transaction.replace(R.id.frame_fragment, frameTopFragment);
+        transaction.commit();
     }
 }

@@ -2,28 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/mn_maps"
+            android:id="@+id/mn_top_he"
             android:icon="@drawable/ic_map_black_48dp"
-            android:title="Top hệ" />
+            android:title="Tóp hệ" />
         <item
-            android:id="@+id/mn_setup"
+            android:id="@+id/mn_top_khoa"
             android:icon="@drawable/ic_setup"
-            android:title="Top khóa" />
+            android:title="Tóp khóa" />
         <item
-            android:id="@+id/mn_list"
+            android:id="@+id/mn_top_nganh"
             android:icon="@drawable/ic_list_point"
-            android:title="Top ngành" />
+            android:title="Tóp ngành" />
         <item
+            android:id="@+id/mn_top_lop"
             android:icon="@drawable/ic_setup"
-            android:title="Top lớp" />
+            android:title="Tóp lớp" />
         <item
             android:id="@+id/mn_change_ui"
             android:icon="@drawable/ic_change_ui"
-            android:title="Thay đổi giao diện" />
+            android:title="Cá nhân" />
         <item
             android:id="@+id/mn_log_out"
             android:icon="@drawable/ic_change_ui"
-            android:title="Nhập lại mã sinh viên" />
+            android:title="Nhập lại" />
     </group>
     <item android:title="Ngoài ra">
         <menu>
