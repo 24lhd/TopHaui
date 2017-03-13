@@ -4,7 +4,7 @@ package com.lhd.obj;
  * Created by D on 12/03/2017.
  */
 
-public class Nganh {
+public class Nganh{
     private String manganh;
 
     @Override
@@ -22,4 +22,6 @@ public class Nganh {
 
         this.manganh = manganh;
     }
+
+
 }

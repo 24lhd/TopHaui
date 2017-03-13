@@ -18,7 +18,7 @@
             android:icon="@drawable/ic_setup"
             android:title="Tóp lớp" />
         <item
-            android:id="@+id/mn_change_ui"
+            android:id="@+id/mn_ca_nhan"
             android:icon="@drawable/ic_change_ui"
             android:title="Cá nhân" />
         <item

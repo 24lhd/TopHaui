@@ -351,5 +351,6 @@
         <color name="bg_app">#ffffff</color>
         <color name="bg_login_fragment">#b3b6b9</color>
         <color name="bg_text">#F5F5F5</color>
+    <color name="colorFrey">#123</color>
 
 </resources>
