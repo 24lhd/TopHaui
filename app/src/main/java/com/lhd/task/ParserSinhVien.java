@@ -16,7 +16,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
 import static duong.ChucNangPhu.getJSONByObj;
@@ -141,6 +140,7 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
      * @return
      */
     private SinhVien parserSinhVien(String msv, String ten, String lop, String khoa, String tl, String nam) {
+        String khoaBanDau=khoa;
         khoa = khoa.replace(")", "");
         khoa= khoa.replace("(", " ");
         khoa = khoa.replace("-", " ");
@@ -155,6 +155,6 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
         String mahe = cut[3] + cut[4] + "";
         nam = nam.replace("Sinh viên năm:", "").trim();
         tl = tl.replace("Điểm TBC TL:", "").trim();
-        return new SinhVien(msv,ten,lop,k,tl,nam,nbatdau,nketthuc,mahe,manganh,khoa);
+        return new SinhVien(msv,ten,lop,k,tl,nam,nbatdau,nketthuc,mahe,manganh,khoaBanDau);
     }
 }

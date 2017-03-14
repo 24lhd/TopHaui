@@ -35,4 +35,6 @@ dependencies {
     compile project(':Duong')
     compile files('libs/jsoup-1.10.2.jar')
     compile 'com.google.code.gson:gson:2.2.4'
+    compile project(':MPChart')
+    compile project(':PullRefesh')
 }

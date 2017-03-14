@@ -5,7 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
 
-    <string name="app_name">Top Công Nghiệp</string>
+    <string name="app_name">Tóp Công Nghiệp</string>
     <string name="save_state_login">Lưu trạng thái đăng nhập</string>
     <string name="un_save_state_login">Không lưu trạng thái đăng nhập</string>
     <string name="hint_id">Mã sinh viên</string>
@@ -21,22 +21,8 @@
     <string name="ads_banner">ca-app-pub-5166837276445736/9271865004</string>
     <string name="ads_full">ca-app-pub-5166837276445736/7795131809</string>
     <string name="thong_bao_dialog">
-        - Đầu tiên mình rất cảm ơn sự nhiệt tình của các bạn đã đóng góp ý kiến
-        cho mình về phần mềm \n - Mình đã tổng hợp và thay đổi 1 số cái nho nhỏ :) \n
-        + Thay đổi 1 số câu chữ viết hoa viết thường :( \n
-        + Vì 1 số bạn không thích icon kết quả thi nên mình đã thêm điểm chữ và thêm tý màu mè \n
-        + Thay đổi tiêu đề thông báo \n
-        + Về điểm tích lũy thì mình đang nghiên cứu tại nhà trường không cho mình dữ liệu nên nếu mình tự tính sẽ
-        có vài trường hợp không đúng, \n
-        Vd: những bạn học 2 ngành, những anh chị khóa trước mã môn khác nên tính sẽ sai nên các bạn chệu khó hết
-        cuối kì vào trang dttc mà xem vậy nhé. Hoặc ước lượng qua điểm chữ.
-        Mình sẽ phát triển thêm cái tính điểm tích lũy bằng cách các bạn sẽ nhập vào số môn, số tin và điểm chữ...\n
-        + Có thể các bạn đã biết: 1 cách để xem phòng thi của mình mà khi mình \n
-        bị hết tiền qlcl đó là xem phòng thi của 2 đứa trên và dưới mình trong lớp, đi thi xem tờ giấy của thầy cô là ok thoy ^^ \n
-        - Mong các bạn chia sẻ phần mềm để nhiều bạn cùng biết.\n
-        - Nhứng ý kiến đóng góp của các bạn mình sẽ tổng hợp và cập nhật ở bản cập nhật lần sau!\n\n
-        Cheers!!!
 
     </string>
     <string name="text_view_off">ưaewewewewewe</string>
+    <string name="text_frame_top_fragment_off">Bạn đang ở chế độ ngoại tuyến \n bật mạng và click vào đây để tải lại</string>
 </resources>

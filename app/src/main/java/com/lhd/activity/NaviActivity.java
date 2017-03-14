@@ -31,22 +31,20 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lhd.config.Config;
 import com.lhd.fm.FrameTopFragment;
 import com.lhd.obj.He;
+import com.lhd.obj.Khoa;
 import com.lhd.obj.Nganh;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.TimeTask;
 import com.lhd.tophaui.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import duong.AppLog;
 import duong.ChucNangPhu;
 import duong.Communication;
@@ -57,13 +55,11 @@ import duong.http.DuongHTTP;
 import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 
-public class NaviActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class NaviActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String APP_LOG = "app_log";
     public static final String MSV = "msv";
     private static final int CODE_RESULT_LOGIN = 10;
     public static final String SINH_VIEN="sinh vien";
-    private static final String LOG_MSV = "log_msv";
     private static final String LOG_INFOR_SV = "info_sinh_vien";
     public static final String KEY_TOP_HE = "top he";
     public static final String KEY_TOP_KHOA = "top khoa";
@@ -72,7 +68,6 @@ public class NaviActivity extends AppCompatActivity
     private static final String STATE_UI = "state_ui";
     private PackageInfo info;
     private AppLog appLog;
-    private String msv;
     private SinhVien sinhVien;
     private TextView tvNameStudent;
     private TextView tvClassStudent;
@@ -89,25 +84,25 @@ public class NaviActivity extends AppCompatActivity
     private int tab_select_color;
     private FrameLayout frameLayout;
     private FrameTopFragment frameTopFragment;
+    private ArrayList<Khoa> khoas;
 
     /**
      * KHỞI TẠO VIEW INTRO và lấy dữ liệu veef heej vaf nganh
      * @param savedInstanceState
+     * kiểm tra xem log đã có sinh viên hay chưa nếu
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(FLAG_FULLSCREEN,FLAG_FULLSCREEN);
-        getWindow().setFlags(FLAG_TRANSLUCENT_NAVIGATION,FLAG_TRANSLUCENT_NAVIGATION);
-       initViewIntro();
+        checkLog();
+
     }
 
     private void setViewMain() {
         getWindow().clearFlags(FLAG_FULLSCREEN);
         setContentView(R.layout.activity_navi);
+        frameTopFragment=new FrameTopFragment();
          toolbar = (Toolbar) findViewById(R.id.toolbar);
-        tab_select_color=getResources().getColor(R.color.colorPrimary);
-        colorApp=getResources().getColor(R.color.colorPrimary);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
@@ -124,9 +119,7 @@ public class NaviActivity extends AppCompatActivity
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             }
             @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
+            public void onDrawerStateChanged(int newState) {}
         });
         drawer.setFitsSystemWindows(true);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -143,19 +136,20 @@ public class NaviActivity extends AppCompatActivity
         timeView= (TextView) headerLayout.findViewById(R.id.tv_time_conlai);
         setContentViewHeaderNavi(sinhVien.getTen(),sinhVien.getLop());
         startTimeView();
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        }else{
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        }else{
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        }
+//        }
         frameLayout= (FrameLayout) findViewById(R.id.frame_fragment);
         setUI(appLog.getValueByName(NaviActivity.this,STATE_UI,"StatusBar"),
                 appLog.getValueByName(NaviActivity.this,STATE_UI,"toolbar"),
                 appLog.getValueByName(NaviActivity.this,STATE_UI,"tab_selecter"),
                 appLog.getValueByName(NaviActivity.this,STATE_UI,"frameLayout"));
+        setViewTop(KEY_TOP_HE);
     }
 
     /**
@@ -193,7 +187,7 @@ public class NaviActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_noti_dttc) {
-
+            setViewNotiDTTC();
             return true;
         }else  if (id == R.id.action_view_change_ui) {
             showDialogSetUI();
@@ -201,6 +195,11 @@ public class NaviActivity extends AppCompatActivity
         }
         return false;
     }
+
+    private void setViewNotiDTTC() {
+
+    }
+
     private void showDialogSetUI() {
         alertDialog = null;
         LayoutInflater layoutInflater=getLayoutInflater();
@@ -215,19 +214,15 @@ public class NaviActivity extends AppCompatActivity
                 alertDialog.dismiss();
             }
         });
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         TabLayout.Tab tabStatus=tabUI.newTab();
         tabStatus.setText("Status Bar");
         tabUI.addTab(tabStatus);
-//        }
         TabLayout.Tab tabBar=tabUI.newTab();
         tabBar.setText("Action Bar");
         tabUI.addTab(tabBar);
-
         TabLayout.Tab tabCategory=tabUI.newTab();
         tabCategory.setText("Tab Bar");
         tabUI.addTab(tabCategory);
-
         TabLayout.Tab tabBg=tabUI.newTab();
         tabBg.setText("Background");
         tabUI.addTab(tabBg);
@@ -271,25 +266,33 @@ public class NaviActivity extends AppCompatActivity
         TimeTask timeTask =new TimeTask(handlertime);
         timeTask.execute();
     }
+
+    /**
+     * set thông tin của sinh viên lên header view khi đã có thông tin
+     * @param tenSV
+     * @param lopSV
+     */
     private void setContentViewHeaderNavi(String tenSV, String lopSV) {
         tvNameStudent.setText(tenSV);
-        tvClassStudent.setText(lopSV+"\n"+"Tích lũy: "+sinhVien.getTl());
+        tvClassStudent.setText(lopSV+" "+sinhVien.getK()+" ("+sinhVien.getNbatdau()+")"+"\n"+"Tích lũy: "+sinhVien.getTl());
     }
 
     /**
      * chạy view intro và khởi tạo log ---- kiểm tra log đã có mã sv chưa
      */
-    private void initViewIntro() {
+    public void initViewIntro() {
         setContentView(R.layout.intro_layout);
         try {
+            getWindow().setFlags(FLAG_FULLSCREEN,FLAG_FULLSCREEN);
+            getWindow().setFlags(FLAG_TRANSLUCENT_NAVIGATION,FLAG_TRANSLUCENT_NAVIGATION);
             RelativeLayout relativeLayout= (RelativeLayout) findViewById(R.id.layout_intro);
-            appLog=new AppLog();
+            tab_select_color=getResources().getColor(R.color.colorPrimary);
+            colorApp=getResources().getColor(R.color.colorPrimary);
             if (appLog.getValueByName(this,STATE_UI,"toolbar")!=null){
                 colorApp=Integer.parseInt(appLog.getValueByName(this,STATE_UI,"toolbar"));
                 relativeLayout.setBackgroundColor(colorApp);
             }
             appLog.openLog(this,APP_LOG);
-            msv=appLog.getValueByName(this,APP_LOG,LOG_MSV);
             PackageManager manager = getPackageManager();
             info = manager.getPackageInfo(getPackageName(), 0);
             String version = "Phiên bản "+info.versionName;
@@ -305,7 +308,8 @@ public class NaviActivity extends AppCompatActivity
                     String jsonHes = (new DuongHTTP()).getHTTP(Config.GET_HE);
                     String jsonNganhs = (new DuongHTTP()).getHTTP(Config.GET_NGANH);
                     String jsonLuotTruyCap = (new DuongHTTP()).getHTTP(Config.GET_LUOT_TRUY_CAP);
-                    setNganhsAndHes(jsonNganhs,jsonHes,jsonLuotTruyCap);
+                    String jsonKhoas = (new DuongHTTP()).getHTTP(Config.GET_KHOA);
+                    setNganhsAndHes(jsonNganhs,jsonHes,jsonLuotTruyCap,jsonKhoas);
                 } catch (Exception e) {
                     fail=true;
                     ChucNangPhu.showLog("Exception doInBackground");
@@ -317,10 +321,10 @@ public class NaviActivity extends AppCompatActivity
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
                 ChucNangPhu.showLog("checkLog");
-                checkLog();
-
+                setViewMain();
             }
         }.execute();
+
     }
     private ArrayList<He> hes;
     private ArrayList<Nganh> nganhs;
@@ -341,21 +345,23 @@ public class NaviActivity extends AppCompatActivity
         return nganhs;
     }
 
-    private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap) {
+    public ArrayList<Khoa> getKhoas() {
+        return khoas;
+    }
+
+    private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap, String jsonKhoas) {
         hes=new ArrayList<>();
         this.fail=false;
         nganhs=new ArrayList<>();
+        khoas=new ArrayList<>();
         try {
             JSONObject jsonObjectHes=new JSONObject(jsonHes);
             int jsonObjectHesStatust= jsonObjectHes.getInt("status");
-            ChucNangPhu.showLog("jsonObjectHesStatust "+jsonObjectHesStatust);
-            ChucNangPhu.showLog(" return fail true khong lay duoc du liẹu");
             if (jsonObjectHesStatust!=1){
                 this.fail=true;
                 ChucNangPhu.showLog("fail true khong lay duoc du liẹu");
                 return;
             }
-            ChucNangPhu.showLog(" return fail true khong lay duoc du liẹu");
             JSONArray jsonArrayHes=jsonObjectHes.getJSONArray("data");
             for (int i = 0; i < jsonArrayHes.length(); i++) {
                 JSONObject jsonObject=jsonArrayHes.getJSONObject(i);
@@ -364,7 +370,6 @@ public class NaviActivity extends AppCompatActivity
                 ChucNangPhu.showLog(he.toString());
             }
             JSONObject jsonObjectNganhs=new JSONObject(jsonNganhs);
-            int jsonObjectNganhsStatust=jsonObjectNganhs.getInt("status");
             JSONArray jsonArrayNganhs=jsonObjectNganhs.getJSONArray("data");
             for (int i = 0; i < jsonArrayNganhs.length(); i++) {
                 JSONObject jsonObject=jsonArrayNganhs.getJSONObject(i);
@@ -373,13 +378,27 @@ public class NaviActivity extends AppCompatActivity
                 ChucNangPhu.showLog(nganh.toString());
             }
 
+
+
+            JSONObject jsonObjectKhoas=new JSONObject(jsonKhoas);
+            JSONArray jsonArrayKhoa=jsonObjectKhoas.getJSONArray("data");
+            for (int i = 0; i < jsonArrayKhoa.length(); i++) {
+                JSONObject jsonO=jsonArrayKhoa.getJSONObject(i);
+                Khoa khoa=new Khoa(jsonO.getString("k"),jsonO.getString("nbatdau"));
+                khoas.add(khoa);
+                ChucNangPhu.showLog(khoa.toString());
+            }
+
+//            soLuotTruyCap=jsonObject.getString("soluot");
+//            soNguoiDung=jsonObject.getString("nguoidadung");
+
             JSONObject jsonObjectLuotTruyCap=new JSONObject(jsonLuotTruyCap);
             int jsonObjectLuotTruyCapStatust=jsonObjectLuotTruyCap.getInt("status");
             JSONArray jsonArrayLuotTruyCap=jsonObjectLuotTruyCap.getJSONArray("data");
             JSONObject jsonObject=jsonArrayLuotTruyCap.getJSONObject(0);
             soLuotTruyCap=jsonObject.getString("soluot");
             soNguoiDung=jsonObject.getString("nguoidadung");
-//            Toast.makeText(this,jsonObjectHes.getString("msg")+"\n"+jsonObjectNganhs.getString("msg"),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,jsonObjectHes.getString("msg")+"\n"+jsonObjectNganhs.getString("msg"),Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             ChucNangPhu.showLog("JSONException setNganhsAndHes khong lay duoc du liẹu");
         }
@@ -392,35 +411,47 @@ public class NaviActivity extends AppCompatActivity
         if (requestCode==CODE_RESULT_LOGIN){
             if(resultCode == Activity.RESULT_OK){
                  sinhVien= (SinhVien) data.getSerializableExtra(NaviActivity.SINH_VIEN);
-                appLog.putValueByName(this,APP_LOG,LOG_MSV,sinhVien.getMa());
                 appLog.putValueByName(this,APP_LOG,LOG_INFOR_SV,ChucNangPhu.getJSONByObj(sinhVien));
-                msv=sinhVien.getMa();
-                setViewMain();// nếu có dữ liệu trả về từ LoginAcivity thì chạy chương trình chính
+               initViewIntro();// nếu có dữ liệu trả về từ LoginAcivity thì chạy chương trình chính
             }else if (resultCode ==Activity.RESULT_CANCELED)
                 finish();
         }else if (requestCode==1){
             if(resultCode == Activity.RESULT_OK){
                 String result=data.getStringExtra(MSV);
-//                getSV(result);
             }else if (resultCode ==Activity.RESULT_CANCELED)
                 finish();
 
         }
     }
 
+    public void setFail(boolean fail) {
+        this.fail = fail;
+    }
+
+    public boolean isFail() {
+        return fail;
+    }
+
     /**
      * kiểm tra xem log đã có mã sinh viên hay chưa, chưa có thì chạy lân activity đăng nhập để nhập mã sinh viên
      * nếu có rồi thì chạy giao diện chính và lấy dữ liệu sinh viên ở trong
+     *
+     *
      */
     private void checkLog() {
         try{
+            appLog=new AppLog();
             String jsonSinhVien=appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV);
-            if (msv!=null&&jsonSinhVien!=null){
+            if ( jsonSinhVien!=null){ // nếu có sinh viên thì lấy các dữ liệu cần thiêt về
                 Gson gson=new Gson();
                 sinhVien=gson.fromJson(appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV),SinhVien.class);
-                setViewMain();// nếu có dữ liệu ở log thì chạy chương trình chính
-            } else
+                initViewIntro();
+               // nếu có dữ liệu ở log thì chạy chương trình chính
+            } else{
+                ChucNangPhu.showLog("else checkLog");
                 startActivityLogin();
+            }
+
         }catch (Exception e){
             ChucNangPhu.showLog("Exception checkLog");
             startActivityLogin();
@@ -431,10 +462,7 @@ public class NaviActivity extends AppCompatActivity
      * bật activity đăng nhập, nếu online thì xóa hết dữ liệu ở log
      */
     private void startActivityLogin() {
-        if (Conections.isOnline(this)){
-            appLog.removeByName(this,APP_LOG,LOG_INFOR_SV);
-            appLog.removeByName(this,APP_LOG,LOG_MSV);
-        }
+
         Intent intentLogin=new Intent(this,LoginActivity.class);
         startActivityForResult(intentLogin,CODE_RESULT_LOGIN);
         overridePendingTransition(R.anim.left_end, R.anim.right_end);
@@ -460,6 +488,8 @@ public class NaviActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.mn_log_out) {
+            if (Conections.isOnline(this))
+                appLog.removeByName(this,APP_LOG,LOG_INFOR_SV);
             startActivityLogin();
         } else if (id == R.id.mn_top_he)
             setViewTop(KEY_TOP_HE);
@@ -487,17 +517,22 @@ public class NaviActivity extends AppCompatActivity
         bundle.putString(FrameTopFragment.KEY_CONTENT,keyTop);
         frameTopFragment.setArguments(bundle);
         transaction.replace(R.id.frame_fragment, frameTopFragment);
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
+//        transaction.commit();
     }
     private void setUI(String status, String bar, String tabs , String bg) {
         if (status!=null) if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             getWindow().setStatusBarColor(Integer.parseInt(status));
-        if (status!=null){
-            toolbar.setBackgroundColor(Integer.parseInt(bar));
+        if (bar!=null){
             colorApp=Integer.parseInt(bar);
+            toolbar.setBackgroundColor(colorApp);
         }
-        if (status!=null) tab_select_color=Integer.parseInt(tabs);
-        if (status!=null) frameLayout.setBackgroundColor(Integer.parseInt(bg));
+        if (tabs!=null) {
+//            if (frameTopFragment!=null)
+//                frameTopFragment.getTabLayout().setBackgroundColor(tab_select_color);
+            tab_select_color=Integer.parseInt(tabs);
+        }
+        if (bg!=null) frameLayout.setBackgroundColor(Integer.parseInt(bg));
     }
     private void loadColorTab() {
         if (frameTopFragment!=null)
@@ -535,7 +570,7 @@ public class NaviActivity extends AppCompatActivity
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getWindow().setStatusBarColor(buttonColor.getColor());
                     appLog.putValueByName(this,STATE_UI,"StatusBar",""+buttonColor.getColor());
-                }else Communication.showToastCenter(this,"Phiên bản hệ điều hành không hỗ trợ");
+                }else Communication.showToast(this,"Phiên bản hệ điều hành không hỗ trợ");
                 break;
         }
     }

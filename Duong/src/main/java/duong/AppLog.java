@@ -31,6 +31,7 @@ public class AppLog {
         editor.commit();
     }
     public void removeByName(Context context,String logName,String key) {
+
         openLog(context,logName);
         editor.remove(key);
         editor.commit();

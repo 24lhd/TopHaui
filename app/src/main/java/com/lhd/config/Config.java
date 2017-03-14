@@ -10,11 +10,13 @@ public class Config {
     /**
      *
      * lick post 1 sinh viên lên server
+     *
      */
     public static final String POST_SINH_VIEN = "https://topcongnghiep.herokuapp.com/sv/";
     public static final String GET_HE = "https://topcongnghiep.herokuapp.com/api/he";
     public static final String GET_NGANH = "https://topcongnghiep.herokuapp.com/api/nganh";
     public static final String GET_LUOT_TRUY_CAP = "https://topcongnghiep.herokuapp.com/api/luottruycap";
+    public static final String GET_KHOA= "https://topcongnghiep.herokuapp.com/api/khoa";
 
     public static String getLinkMonHocBatBuoc(String msv){
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-bat-buoc?action=p1&p=1&ps=500&exp=rownb&dir=1&s=" + msv;
