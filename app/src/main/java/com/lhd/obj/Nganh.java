@@ -6,11 +6,13 @@ package com.lhd.obj;
 
 public class Nganh{
     private String manganh;
+    private String nam;
 
     @Override
     public String toString() {
         return "Nganh{" +
                 "manganh='" + manganh + '\'' +
+                ", nam='" + nam + '\'' +
                 '}';
     }
 
@@ -18,10 +20,13 @@ public class Nganh{
         return manganh;
     }
 
-    public Nganh(String manganh) {
-
-        this.manganh = manganh;
+    public String getNam() {
+        return nam;
     }
 
+    public Nganh(String manganh, String nam) {
 
+        this.manganh = manganh;
+        this.nam = nam;
+    }
 }

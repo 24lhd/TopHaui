@@ -1,6 +1,9 @@
 package com.lhd.db;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
+import android.util.Log;
 
 import com.lhd.config.Config;
 
@@ -50,6 +53,35 @@ public class DuLieu {
     public DuLieu(Context context) {
         duongSQLite=new DuongSQLite();
         this.context=context;
+
+
+    }
+    public String getNotiDTTC() {
+        try {
+            openDatabases();
+            Cursor cursor=duongSQLite.getDatabase().query("notidttc",null,null,null,null,null,null);
+            cursor.getCount();// tra ve so luong ban ghi no ghi dc
+            cursor.getColumnNames();// 1 mang cac cot
+            cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
+            int tenSV=cursor.getColumnIndex("title");
+            int maSV=cursor.getColumnIndex("link");
+//            while (!cursor.isAfterLast()){
+//                itemNotiDTTCs.add(new ItemNotiDTTC(cursor.getString(maSV),cursor.getString(tenSV)));
+//                cursor.moveToNext();
+//            }
+            closeDatabases();
+            return "" ;
+        }catch (CursorIndexOutOfBoundsException e){
+            Log.e("faker","getNotiDTTC");
+            return null;
+        }
+    }
+
+    private void closeDatabases() {
+        duongSQLite.cloneDatabase();
+    }
+
+    private void openDatabases() {
         duongSQLite.createOrOpenDataBases(context, Config.DATABASE_NAME);
         runQuery(createTBDiemHocTap);
         runQuery(createTBNganhs);
@@ -59,24 +91,31 @@ public class DuLieu {
         runQuery(createTBTopKhoa);
         runQuery(createTBTopNganh);
         runQuery(createTBTopLop);
-
     }
 
-    private void insertTopHe(String jsonTopHe) {
+    public void insertTopHe(String jsonTopHe) {
+        openDatabases();
         duongSQLite.getDatabase().execSQL("DELETE FROM `top_he` ;");
         duongSQLite.getDatabase().execSQL("INSERT INTO `top_he`(`stt`,`top_he`) VALUES (NULL,'"+jsonTopHe+"');");
+        closeDatabases();
     }
-    private void insertTopKhoa(String jsonTopKhoa) {
+    public void insertTopKhoa(String jsonTopKhoa) {
+        openDatabases();
         duongSQLite.getDatabase().execSQL("DELETE FROM `top_khoa` ;");
         duongSQLite.getDatabase().execSQL("INSERT INTO `top_khoa`(`stt`,`top_khoa`) VALUES (NULL,'"+jsonTopKhoa+"');");
+        closeDatabases();
     }
-    private void insertTopNganh(String jsonTopNganh) {
+    public void insertTopNganh(String jsonTopNganh) {
+        openDatabases();
         duongSQLite.getDatabase().execSQL("DELETE FROM `top_nganh` ;");
         duongSQLite.getDatabase().execSQL("INSERT INTO `top_nganh`(`stt`,`top_nganh`) VALUES (NULL,'"+jsonTopNganh+"');");
+        closeDatabases();
     }
-    private void insertTopLop(String jsonTopLop) {
+    public void insertTopLop(String jsonTopLop) {
+        openDatabases();
         duongSQLite.getDatabase().execSQL("DELETE FROM `top_lop` ;");
         duongSQLite.getDatabase().execSQL("INSERT INTO `top_lop`(`stt`,`top_lop`) VALUES (NULL,'"+jsonTopLop+"');");
+        closeDatabases();
     }
 
     /**

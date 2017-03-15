@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.lhd.fm.ThongBaoDtttcFragment;
 import com.lhd.obj.ItemNotiDTTC;
+import com.lhd.task.ParserLinkFileNoti;
 import com.lhd.tophaui.R;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import static duong.Conections.isOnline;
  */
 
 public class ThongBaoDTTCAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
+    private static final int MENU_ITEM_VIEW_TYPE = 1;
     private ArrayList<ItemNotiDTTC> itemNotiDTTCs;
     private ThongBaoDtttcFragment thongBaoDtttcFragment;
     private RecyclerView recyclerView;
@@ -46,8 +48,9 @@ public class ThongBaoDTTCAdaptor extends RecyclerView.Adapter<RecyclerView.ViewH
     }
     @Override
     public int getItemViewType(int position) {
-        if (position==0) return MENU_ITEM_VIEW_TYPE;
-        return (position % ITEMS_PER_AD == 0&&isOnline(thongBaoDtttcFragment.getActivity())) ? NATIVE_EXPRESS_AD_VIEW_TYPE : MENU_ITEM_VIEW_TYPE;
+//        if (position==0)
+            return MENU_ITEM_VIEW_TYPE;
+//        return (position % ITEMS_PER_AD == 0&&isOnline(thongBaoDtttcFragment.getActivity())) ? NATIVE_EXPRESS_AD_VIEW_TYPE : MENU_ITEM_VIEW_TYPE;
     }
     public ThongBaoDTTCAdaptor(List<Object> mRecyclerViewItems, RecyclerView recyclerView,
                                ThongBaoDtttcFragment thongBaoDtttcFragment, ArrayList<ItemNotiDTTC> itemNotiDTTCs) {
@@ -59,11 +62,11 @@ public class ThongBaoDTTCAdaptor extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
-            case NATIVE_EXPRESS_AD_VIEW_TYPE:
-                View nativeExpressLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.native_express_ad_vua, parent, false);
-                return new NativeExpressAdViewHolder(nativeExpressLayoutView);
+//            case NATIVE_EXPRESS_AD_VIEW_TYPE:
+//                View nativeExpressLayoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.native_express_ad_vua, parent, false);
+//                return new NativeExpressAdViewHolder(nativeExpressLayoutView);
             default:
-            case MENU_ITEM_VIEW_TYPE:
+
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_noti_qlcl, parent, false);
                 ItemNoti holder = new ItemNoti(view);
                 return holder;
@@ -74,17 +77,17 @@ public class ThongBaoDTTCAdaptor extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
         switch (viewType) {
-            case NATIVE_EXPRESS_AD_VIEW_TYPE:
-                NativeExpressAdViewHolder nativeExpressAdViewHolder= (NativeExpressAdViewHolder) holder;
-                thongBaoDtttcFragment.loadNativeExpressAt(nativeExpressAdViewHolder.nativeExpressAdView);
-                break;
-            default: case MainActivity.MENU_ITEM_VIEW_TYPE:
+//            case NATIVE_EXPRESS_AD_VIEW_TYPE:
+//                NativeExpressAdViewHolder nativeExpressAdViewHolder= (NativeExpressAdViewHolder) holder;
+//                thongBaoDtttcFragment.loadNativeExpressAt(nativeExpressAdViewHolder.nativeExpressAdView);
+//                break;
+            default:
                 ItemNoti itemNoti= (ItemNoti) holder;
                 final ItemNotiDTTC itemNotiDTTC= (ItemNotiDTTC) mRecyclerViewItems.get(position);
                 itemNoti.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (MainActivity.isOnline(thongBaoDtttcFragment.getActivity())){
+                        if (isOnline(thongBaoDtttcFragment.getActivity())){
                             int itemPosition = recyclerView.getChildLayoutPosition(view);
                             ParserLinkFileNoti parserNotiDTTC=new ParserLinkFileNoti(thongBaoDtttcFragment.getActivity());
                             parserNotiDTTC.execute(itemNotiDTTC.getLink());

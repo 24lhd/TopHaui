@@ -5,11 +5,9 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.lhd.obj.ItemNotiDTTC;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
 import java.io.IOException;
 import java.util.ArrayList;
 

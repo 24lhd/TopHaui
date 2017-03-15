@@ -7,12 +7,14 @@ package com.lhd.obj;
 public class Khoa {
     private String khoa;
     private String nbatdau;
+    private String nam;
 
     @Override
     public String toString() {
         return "Khoa{" +
                 "khoa='" + khoa + '\'' +
                 ", nbatdau='" + nbatdau + '\'' +
+                ", nam='" + nam + '\'' +
                 '}';
     }
 
@@ -24,9 +26,14 @@ public class Khoa {
         return nbatdau;
     }
 
-    public Khoa(String khoa, String nbatdau) {
+    public String getNam() {
+        return nam;
+    }
+
+    public Khoa(String khoa, String nbatdau, String nam) {
 
         this.khoa = khoa;
         this.nbatdau = nbatdau;
+        this.nam = nam;
     }
 }

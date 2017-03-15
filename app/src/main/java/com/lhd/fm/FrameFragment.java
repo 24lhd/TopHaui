@@ -1,11 +1,7 @@
 package com.lhd.fm;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -17,14 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.lhd.db.SQLiteManager;
 import com.lhd.obj.SinhVien;
@@ -49,74 +43,11 @@ public abstract class FrameFragment extends Fragment {
     private WebView webView;
     private  AlertDialog.Builder builder;
     private View viewAd;
-    private ADSFull adsFull;
-
-    public MainActivity getMainActivity() {
-        return (MainActivity) getActivity();
-    }
     protected SQLiteManager sqLiteManager;
     protected PullRefreshLayout pullRefresh;
     protected SinhVien sv;
     protected ArrayList<Object> objects;
 
-    public void showAlert(final String title, String html, final String titleSMS, final String SMS, final Activity activity) {
-        adsFull.showADSFull();
-        builder = new AlertDialog.Builder(getActivity());
-        webView = new WebView(getActivity());
-        builder.setTitle(title);
-        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
-        builder.setView(webView);
-        builder.setNeutralButton("Chia sẻ SMS", null);
-        builder.setPositiveButton("Chia sẻ ảnh", null);
-        AlertDialog mAlertDialog = builder.create();
-        mAlertDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-//                showADSFull();
-            }
-        });
-        mAlertDialog.show();
-        Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-        b.setTextColor(getResources().getColor(R.color.colorPrimary));
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.sreenShort(view, activity);
-            }
-        });
-        Button c = mAlertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
-        c.setTextColor(getResources().getColor(R.color.colorPrimary));
-        c.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity.shareText(activity, titleSMS, SMS);
-            }
-        });
-
-    }
-    public void loadNativeExpressAds(final String id, final int height) {
-
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final float density = getActivity().getResources().getDisplayMetrics().density;
-                    for (int i = 0; i <= objects.size(); i += ITEMS_PER_AD) {
-                        NativeExpressAdView adView = (NativeExpressAdView) objects.get(i);
-                        AdSize adSize = null;
-                         adSize = new AdSize((int) (recyclerView.getWidth()/density),height);
-
-                        adView.setAdSize(adSize);
-                        adView.setAdUnitId(id);
-                    }
-//                    if (isOnline(getActivity())) loadNativeExpressAd(0);
-                }catch (NullPointerException e){
-
-                }
-            }
-        });
-
-    }
     public void loadNativeExpressAt( NativeExpressAdView nativeExpressAdView) {
         if (isOnline(getActivity()))
         nativeExpressAdView.loadAd(new AdRequest.Builder().build());
@@ -126,20 +57,6 @@ public abstract class FrameFragment extends Fragment {
 
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;
-    }
-    public void addNativeExpressAds() {
-        if (!isOnline(getActivity())) return;
-        for (int i = ITEMS_PER_AD; i <= objects.size(); i += ITEMS_PER_AD) {
-            NativeExpressAdView adView = new NativeExpressAdView(getActivity());
-            objects.add(i, adView);
-        }
-    }
-    public void addNativeExpressAds(String adUnitIdKqht, int nativeExpressAdHeight) {
-        for (int i = 0; i <= objects.size(); i += ITEMS_PER_AD) {
-            final NativeExpressAdView adView = new NativeExpressAdView(getActivity());
-            objects.add(i, adView);
-        }
-      loadNativeExpressAds(adUnitIdKqht,nativeExpressAdHeight);
     }
     private LayoutInflater layoutInflater;
     protected abstract void startParser();
@@ -158,8 +75,8 @@ public abstract class FrameFragment extends Fragment {
                     snackbar.setAction("Bật wifi", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
-                            wifiManager.setWifiEnabled(true);
+//                            WifiManager wifiManager = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+//                            wifiManager.setWifiEnabled(true);
                             showProgress();
                             snackbar.dismiss();
                            loadData();
@@ -241,10 +158,9 @@ public abstract class FrameFragment extends Fragment {
 
     public void initView(View view) {
         pullRefresh= (PullRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        adsFull=new ADSFull(getContext());
         sqLiteManager=new SQLiteManager(getContext());
-        try {sv= (SinhVien) getArguments().getSerializable(MainActivity.SINH_VIEN);
-        }catch (NullPointerException e){}
+//        try {sv= (SinhVien) getArguments().getSerializable(MainActivity.SINH_VIEN);
+//        }catch (NullPointerException e){}
         progressBar= (ProgressBar) view.findViewById(R.id.pg_loading);
         tVnull= (TextView) view.findViewById(R.id.text_null);
         recyclerView= (RecyclerView) view.findViewById(R.id.recle_view);

@@ -31,20 +31,27 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.lhd.config.Config;
+import com.lhd.db.DuLieu;
+import com.lhd.fm.FrameMoreFragment;
 import com.lhd.fm.FrameTopFragment;
+import com.lhd.fm.ThongBaoDtttcFragment;
 import com.lhd.obj.He;
 import com.lhd.obj.Khoa;
+import com.lhd.obj.Lop;
 import com.lhd.obj.Nganh;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.TimeTask;
 import com.lhd.tophaui.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
+
 import duong.AppLog;
 import duong.ChucNangPhu;
 import duong.Communication;
@@ -62,6 +69,12 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     public static final String SINH_VIEN="sinh vien";
     private static final String LOG_INFOR_SV = "info_sinh_vien";
     public static final String KEY_TOP_HE = "top he";
+    private FrameMoreFragment frameMoreFragment;
+
+    public ArrayList<Lop> getLops() {
+        return lops;
+    }
+
     public static final String KEY_TOP_KHOA = "top khoa";
     public static final String KEY_TOP_NGANH = "top nganh";
     public static final String KEY_TOP_LOP = "top lop";
@@ -82,9 +95,12 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private int colorApp;
     private int tab_select_color;
+    private DuLieu duLieu;
     private FrameLayout frameLayout;
     private FrameTopFragment frameTopFragment;
     private ArrayList<Khoa> khoas;
+    private ThongBaoDtttcFragment thongBaoDtttcFragment;
+    private ArrayList<Lop> lops;
 
     /**
      * KHỞI TẠO VIEW INTRO và lấy dữ liệu veef heej vaf nganh
@@ -140,8 +156,8 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
 //            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        }else{
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        }
         frameLayout= (FrameLayout) findViewById(R.id.frame_fragment);
@@ -187,7 +203,7 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_noti_dttc) {
-            setViewNotiDTTC();
+            setViewMoreFragmetnt();
             return true;
         }else  if (id == R.id.action_view_change_ui) {
             showDialogSetUI();
@@ -196,9 +212,13 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    private void setViewNotiDTTC() {
-
+    private void setViewMoreFragmetnt() {
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+         frameMoreFragment=new FrameMoreFragment();
+        transaction.replace(R.id.frame_fragment, frameMoreFragment);
+        transaction.commitAllowingStateLoss();
     }
+
 
     private void showDialogSetUI() {
         alertDialog = null;
@@ -309,7 +329,8 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
                     String jsonNganhs = (new DuongHTTP()).getHTTP(Config.GET_NGANH);
                     String jsonLuotTruyCap = (new DuongHTTP()).getHTTP(Config.GET_LUOT_TRUY_CAP);
                     String jsonKhoas = (new DuongHTTP()).getHTTP(Config.GET_KHOA);
-                    setNganhsAndHes(jsonNganhs,jsonHes,jsonLuotTruyCap,jsonKhoas);
+                    String jsonLops = (new DuongHTTP()).getHTTP(Config.GET_LOP);
+                    setNganhsAndHes(jsonNganhs,jsonHes,jsonLuotTruyCap,jsonKhoas,jsonLops);
                 } catch (Exception e) {
                     fail=true;
                     ChucNangPhu.showLog("Exception doInBackground");
@@ -349,56 +370,26 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
         return khoas;
     }
 
-    private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap, String jsonKhoas) {
-        hes=new ArrayList<>();
+    private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap, String jsonKhoas,String jsonLops) {
         this.fail=false;
-        nganhs=new ArrayList<>();
-        khoas=new ArrayList<>();
         try {
-            JSONObject jsonObjectHes=new JSONObject(jsonHes);
-            int jsonObjectHesStatust= jsonObjectHes.getInt("status");
-            if (jsonObjectHesStatust!=1){
-                this.fail=true;
-                ChucNangPhu.showLog("fail true khong lay duoc du liẹu");
-                return;
-            }
-            JSONArray jsonArrayHes=jsonObjectHes.getJSONArray("data");
-            for (int i = 0; i < jsonArrayHes.length(); i++) {
-                JSONObject jsonObject=jsonArrayHes.getJSONObject(i);
-                He he=new He(jsonObject.getString("mahe"),jsonObject.getString("tenhe"));
-                hes.add(he);
-                ChucNangPhu.showLog(he.toString());
-            }
-            JSONObject jsonObjectNganhs=new JSONObject(jsonNganhs);
-            JSONArray jsonArrayNganhs=jsonObjectNganhs.getJSONArray("data");
-            for (int i = 0; i < jsonArrayNganhs.length(); i++) {
-                JSONObject jsonObject=jsonArrayNganhs.getJSONObject(i);
-               Nganh nganh=new Nganh(jsonObject.getString("manganh"));
-                nganhs.add(nganh);
-                ChucNangPhu.showLog(nganh.toString());
-            }
-
-
-
-            JSONObject jsonObjectKhoas=new JSONObject(jsonKhoas);
-            JSONArray jsonArrayKhoa=jsonObjectKhoas.getJSONArray("data");
-            for (int i = 0; i < jsonArrayKhoa.length(); i++) {
-                JSONObject jsonO=jsonArrayKhoa.getJSONObject(i);
-                Khoa khoa=new Khoa(jsonO.getString("k"),jsonO.getString("nbatdau"));
-                khoas.add(khoa);
-                ChucNangPhu.showLog(khoa.toString());
-            }
-
-//            soLuotTruyCap=jsonObject.getString("soluot");
-//            soNguoiDung=jsonObject.getString("nguoidadung");
-
+            // dịch các dữ liệu lấy từ api và trả về 1 mảng những đối tượng
+            hes=Config.getHesByJson(jsonHes);
+            nganhs=Config.getNganhByJson(jsonNganhs);
+            khoas=Config.getKhoaByJson(jsonKhoas);
+            lops=Config.getLopByJson(jsonLops);
+            // chèn json dữ liệu vào csdl
+            duLieu.insertTopHe(jsonHes);
+            duLieu.insertTopKhoa(jsonKhoas);
+            duLieu.insertTopLop(jsonLops);
+            duLieu.insertTopNganh(jsonNganhs);
+            //lấy cá lượt truy cập và ng dùng
             JSONObject jsonObjectLuotTruyCap=new JSONObject(jsonLuotTruyCap);
-            int jsonObjectLuotTruyCapStatust=jsonObjectLuotTruyCap.getInt("status");
             JSONArray jsonArrayLuotTruyCap=jsonObjectLuotTruyCap.getJSONArray("data");
             JSONObject jsonObject=jsonArrayLuotTruyCap.getJSONObject(0);
             soLuotTruyCap=jsonObject.getString("soluot");
             soNguoiDung=jsonObject.getString("nguoidadung");
-            Toast.makeText(this,jsonObjectHes.getString("msg")+"\n"+jsonObjectNganhs.getString("msg"),Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,jsonObjectHes.getString("msg")+"\n"+jsonObjectNganhs.getString("msg"),Toast.LENGTH_SHORT).show();
         } catch (JSONException e) {
             ChucNangPhu.showLog("JSONException setNganhsAndHes khong lay duoc du liẹu");
         }
@@ -441,6 +432,7 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     private void checkLog() {
         try{
             appLog=new AppLog();
+            duLieu=new DuLieu(this);
             String jsonSinhVien=appLog.getValueByName(this,APP_LOG,LOG_INFOR_SV);
             if ( jsonSinhVien!=null){ // nếu có sinh viên thì lấy các dữ liệu cần thiêt về
                 Gson gson=new Gson();
