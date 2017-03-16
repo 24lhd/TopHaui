@@ -31,7 +31,7 @@ import static duong.Conections.isOnline;
  * Created by D on 07/03/2017.
  */
 
-public class LoginActivity extends Activity {
+public class Login extends Activity {
     private EditText etId;
     private TextView tvError;
     private AppCompatButton processButton;
@@ -90,7 +90,7 @@ public class LoginActivity extends Activity {
                 if (msg.what==2){
                     processButton.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
-                    if (isOnline(LoginActivity.this)) tvError.setText("* Mã sinh viên không đúng bạn êi....");
+                    if (isOnline(Login.this)) tvError.setText("* Mã sinh viên không đúng bạn êi....");
                     else tvError.setText("* Không có kêt nối Iternet!");
                     return;
                 }else if (msg.obj instanceof SinhVien){
@@ -104,7 +104,7 @@ public class LoginActivity extends Activity {
     }
     private void goToUI(SinhVien sinhVien) {
         Intent returnIntent =getIntent();
-        returnIntent.putExtra(NaviActivity.SINH_VIEN,sinhVien);
+        returnIntent.putExtra(Main.SINH_VIEN,sinhVien);
         setResult(Activity.RESULT_OK,returnIntent);
         try {
             postToServer(sinhVien);

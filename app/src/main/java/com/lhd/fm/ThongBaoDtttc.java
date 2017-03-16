@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by D on 12/15/2016.
  */
 
-public class ThongBaoDtttcFragment extends FrameFragment {
+public class ThongBaoDtttc extends Frame {
     private ArrayList<ItemNotiDTTC> itemNotiDTTCs;
     public void checkDatabase() {
         showProgress();

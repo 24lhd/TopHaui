@@ -53,8 +53,7 @@ public class DuLieu {
     public DuLieu(Context context) {
         duongSQLite=new DuongSQLite();
         this.context=context;
-
-
+        openDatabases();
     }
     public String getNotiDTTC() {
         try {
@@ -65,10 +64,6 @@ public class DuLieu {
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int tenSV=cursor.getColumnIndex("title");
             int maSV=cursor.getColumnIndex("link");
-//            while (!cursor.isAfterLast()){
-//                itemNotiDTTCs.add(new ItemNotiDTTC(cursor.getString(maSV),cursor.getString(tenSV)));
-//                cursor.moveToNext();
-//            }
             closeDatabases();
             return "" ;
         }catch (CursorIndexOutOfBoundsException e){
@@ -135,10 +130,14 @@ public class DuLieu {
 
 
     public void deleteItemDiemHocTap(String msv) {
+        openDatabases();
         duongSQLite.getDatabase().execSQL("DELETE FROM `diem_hoc_tap` WHERE `msv`='"+msv+"';");
+        closeDatabases();
     }
     public void insertItemDiemHocTap(String msv,String item) {
+        openDatabases();
         duongSQLite.getDatabase().execSQL("INSERT INTO `diem_hoc_tap`(`stt`,`msv`,`item`) VALUES (NULL,'"+msv+"','"+item+"');");
+        closeDatabases();
     }
 
     public void runQuery(String s) {

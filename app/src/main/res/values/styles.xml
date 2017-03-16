@@ -12,7 +12,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-
+    <style name="capfale" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
         <item name="android:windowContentOverlay">@null</item>
     </style>

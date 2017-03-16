@@ -33,7 +33,7 @@ import static duong.Conections.isOnline;
  * Created by D on 12/19/2016.
  */
 
-public abstract class FrameFragment extends Fragment {
+public abstract class Frame extends Fragment {
     public static final String KEY_OBJECT = "send_object";
     public static final String KEY_ACTIVITY = "key_start_activity";
     protected RecyclerView recyclerView;

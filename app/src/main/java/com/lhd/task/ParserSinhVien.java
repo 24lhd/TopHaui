@@ -16,6 +16,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
+
+import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
 import static duong.ChucNangPhu.getJSONByObj;
@@ -45,6 +48,7 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
             Document docLinkMonHocConThieu = null;
             Document docLinkMonHocTuChon = null;
             try {
+                ChucNangPhu.showLog("msv "+Config.getLinkMonHocBatBuoc(params[0]));
                 docMonHocBatBuoc = Jsoup.connect(Config.getLinkMonHocBatBuoc(params[0])).get();
                 docLinkMonHocConThieu = Jsoup.connect(Config.getLinkMonHocConThieu(params[0])).get();
                 docLinkMonHocTuChon = Jsoup.connect(Config.getLinkMonHocTuChon(params[0])).get();
@@ -52,7 +56,6 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                  * lấy thông tin cá nhân ở trang docMonHocBatBuoc
                  */
                 String msv=params[0];
-
                 /**
                  * xóa hết dữ liệu điểm học tập của  sinh viên theo mã trước khi cài
                  */
@@ -108,10 +111,8 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                  * đọc thông tin từ sinh viên và lọc các dữ liệu và put lên server update
                  */
                 SinhVien sinhVien=parserSinhVien(msv,ten,lop,khoa,tl,nam);
-
-
                 return sinhVien;
-            } catch (Exception e) {
+            } catch (IOException e) {
                 Log.e("faker"," TaskQLCL IOException");
             }
             return null;

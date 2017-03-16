@@ -35,9 +35,9 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lhd.config.Config;
 import com.lhd.db.DuLieu;
-import com.lhd.fm.FrameMoreFragment;
-import com.lhd.fm.FrameTopFragment;
-import com.lhd.fm.ThongBaoDtttcFragment;
+import com.lhd.fm.FrameMore;
+import com.lhd.fm.FrameTop;
+import com.lhd.fm.ThongBaoDtttc;
 import com.lhd.obj.He;
 import com.lhd.obj.Khoa;
 import com.lhd.obj.Lop;
@@ -62,14 +62,14 @@ import duong.http.DuongHTTP;
 import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 import static android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
 
-public class NaviActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final String APP_LOG = "app_log";
     public static final String MSV = "msv";
     private static final int CODE_RESULT_LOGIN = 10;
     public static final String SINH_VIEN="sinh vien";
     private static final String LOG_INFOR_SV = "info_sinh_vien";
     public static final String KEY_TOP_HE = "top he";
-    private FrameMoreFragment frameMoreFragment;
+    private FrameMore frameMore;
 
     public ArrayList<Lop> getLops() {
         return lops;
@@ -97,9 +97,9 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     private int tab_select_color;
     private DuLieu duLieu;
     private FrameLayout frameLayout;
-    private FrameTopFragment frameTopFragment;
+    private FrameTop frameTop;
     private ArrayList<Khoa> khoas;
-    private ThongBaoDtttcFragment thongBaoDtttcFragment;
+    private ThongBaoDtttc thongBaoDtttcFragment;
     private ArrayList<Lop> lops;
 
     /**
@@ -117,7 +117,7 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     private void setViewMain() {
         getWindow().clearFlags(FLAG_FULLSCREEN);
         setContentView(R.layout.activity_navi);
-        frameTopFragment=new FrameTopFragment();
+        frameTop =new FrameTop();
          toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -161,10 +161,10 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //        }
         frameLayout= (FrameLayout) findViewById(R.id.frame_fragment);
-        setUI(appLog.getValueByName(NaviActivity.this,STATE_UI,"StatusBar"),
-                appLog.getValueByName(NaviActivity.this,STATE_UI,"toolbar"),
-                appLog.getValueByName(NaviActivity.this,STATE_UI,"tab_selecter"),
-                appLog.getValueByName(NaviActivity.this,STATE_UI,"frameLayout"));
+        setUI(appLog.getValueByName(Main.this,STATE_UI,"StatusBar"),
+                appLog.getValueByName(Main.this,STATE_UI,"toolbar"),
+                appLog.getValueByName(Main.this,STATE_UI,"tab_selecter"),
+                appLog.getValueByName(Main.this,STATE_UI,"frameLayout"));
         setViewTop(KEY_TOP_HE);
     }
 
@@ -214,8 +214,8 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
 
     private void setViewMoreFragmetnt() {
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-         frameMoreFragment=new FrameMoreFragment();
-        transaction.replace(R.id.frame_fragment, frameMoreFragment);
+         frameMore =new FrameMore();
+        transaction.replace(R.id.frame_fragment, frameMore);
         transaction.commitAllowingStateLoss();
     }
 
@@ -227,6 +227,7 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
         tabUI= (TabLayout) view.findViewById(R.id.tab_ui_layout);
         tabUI.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabUI.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabUI.setBackgroundColor(tab_select_color);
         tabUI.setSelectedTabIndicatorColor(Color.WHITE);
         ((ImageButton) view.findViewById(R.id.imb_close_change_ui)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -401,7 +402,7 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode==CODE_RESULT_LOGIN){
             if(resultCode == Activity.RESULT_OK){
-                 sinhVien= (SinhVien) data.getSerializableExtra(NaviActivity.SINH_VIEN);
+                 sinhVien= (SinhVien) data.getSerializableExtra(Main.SINH_VIEN);
                 appLog.putValueByName(this,APP_LOG,LOG_INFOR_SV,ChucNangPhu.getJSONByObj(sinhVien));
                initViewIntro();// nếu có dữ liệu trả về từ LoginAcivity thì chạy chương trình chính
             }else if (resultCode ==Activity.RESULT_CANCELED)
@@ -454,14 +455,9 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
      * bật activity đăng nhập, nếu online thì xóa hết dữ liệu ở log
      */
     private void startActivityLogin() {
-
-        Intent intentLogin=new Intent(this,LoginActivity.class);
+        Intent intentLogin=new Intent(this,Login.class);
         startActivityForResult(intentLogin,CODE_RESULT_LOGIN);
         overridePendingTransition(R.anim.left_end, R.anim.right_end);
-    }
-
-    private void checkLogDTTC(String msv) {
-
     }
 
 
@@ -504,11 +500,11 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
 
     private void setViewTop(String keyTop) {
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-         frameTopFragment=new FrameTopFragment();
+         frameTop =new FrameTop();
         Bundle bundle=new Bundle();
-        bundle.putString(FrameTopFragment.KEY_CONTENT,keyTop);
-        frameTopFragment.setArguments(bundle);
-        transaction.replace(R.id.frame_fragment, frameTopFragment);
+        bundle.putString(FrameTop.KEY_CONTENT,keyTop);
+        frameTop.setArguments(bundle);
+        transaction.replace(R.id.frame_fragment, frameTop);
         transaction.commitAllowingStateLoss();
 //        transaction.commit();
     }
@@ -520,15 +516,17 @@ public class NaviActivity extends AppCompatActivity implements NavigationView.On
             toolbar.setBackgroundColor(colorApp);
         }
         if (tabs!=null) {
-//            if (frameTopFragment!=null)
-//                frameTopFragment.getTabLayout().setBackgroundColor(tab_select_color);
+//            if (frameTop!=null)
+//                frameTop.getTabLayout().setBackgroundColor(tab_select_color);
             tab_select_color=Integer.parseInt(tabs);
         }
         if (bg!=null) frameLayout.setBackgroundColor(Integer.parseInt(bg));
     }
     private void loadColorTab() {
-        if (frameTopFragment!=null)
-        frameTopFragment.getTabLayout().setBackgroundColor(tab_select_color);
+        if (frameTop !=null)
+        frameTop.getTabLayout().setBackgroundColor(tab_select_color);
+        if (frameMore !=null)
+            frameMore.getTabLayout().setBackgroundColor(tab_select_color);
         tabUI.setBackgroundColor(tab_select_color);
     }
 

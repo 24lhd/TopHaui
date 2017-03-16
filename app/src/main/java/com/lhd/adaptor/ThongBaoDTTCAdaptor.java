@@ -8,7 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.NativeExpressAdView;
-import com.lhd.fm.ThongBaoDtttcFragment;
+import com.lhd.fm.ThongBaoDtttc;
 import com.lhd.obj.ItemNotiDTTC;
 import com.lhd.task.ParserLinkFileNoti;
 import com.lhd.tophaui.R;
@@ -26,7 +26,7 @@ import static duong.Conections.isOnline;
 public class ThongBaoDTTCAdaptor extends RecyclerView.Adapter<RecyclerView.ViewHolder>   {
     private static final int MENU_ITEM_VIEW_TYPE = 1;
     private ArrayList<ItemNotiDTTC> itemNotiDTTCs;
-    private ThongBaoDtttcFragment thongBaoDtttcFragment;
+    private ThongBaoDtttc thongBaoDtttcFragment;
     private RecyclerView recyclerView;
     private List<Object> mRecyclerViewItems;
 
@@ -53,7 +53,7 @@ public class ThongBaoDTTCAdaptor extends RecyclerView.Adapter<RecyclerView.ViewH
 //        return (position % ITEMS_PER_AD == 0&&isOnline(thongBaoDtttcFragment.getActivity())) ? NATIVE_EXPRESS_AD_VIEW_TYPE : MENU_ITEM_VIEW_TYPE;
     }
     public ThongBaoDTTCAdaptor(List<Object> mRecyclerViewItems, RecyclerView recyclerView,
-                               ThongBaoDtttcFragment thongBaoDtttcFragment, ArrayList<ItemNotiDTTC> itemNotiDTTCs) {
+                               ThongBaoDtttc thongBaoDtttcFragment, ArrayList<ItemNotiDTTC> itemNotiDTTCs) {
         this.recyclerView = recyclerView;
         this.mRecyclerViewItems = mRecyclerViewItems;
         this.thongBaoDtttcFragment = thongBaoDtttcFragment;

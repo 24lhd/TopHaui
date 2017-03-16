@@ -14,16 +14,16 @@ import com.lhd.tophaui.R;
  * Created by D on 12/03/2017.
  */
 
-public class ContentTopFragment extends Fragment {
-    private static final ContentTopFragment ourInstance = new ContentTopFragment();
+public class ContentTop extends Fragment {
+    private static final ContentTop ourInstance = new ContentTop();
     private RecyclerView recyclerView;
 
-    public static ContentTopFragment getInstance() {
+    public static ContentTop getInstance() {
 
         return ourInstance;
     }
 
-    public ContentTopFragment() {
+    public ContentTop() {
 
     }
 
