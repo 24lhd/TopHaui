@@ -68,7 +68,7 @@
                         android:layout_marginLeft="10dp"
                         android:id="@+id/id_msv"
                         style="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimary"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout

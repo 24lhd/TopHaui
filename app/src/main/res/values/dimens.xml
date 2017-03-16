@@ -8,6 +8,6 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_boder_view">5dp</dimen>
     <dimen name="margin_view">5dp</dimen>
-    <dimen name="margin_item">5dp</dimen>
+    <dimen name="margin_item">3dp</dimen>
     <dimen name="margin_view_inner">5dp</dimen>
 </resources>
