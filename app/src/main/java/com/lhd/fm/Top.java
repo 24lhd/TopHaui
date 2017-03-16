@@ -4,11 +4,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.lhd.activity.Main;
+import com.lhd.adaptor.ListSinhVien;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.GetJSONByLink;
-
 import java.util.ArrayList;
-
 import duong.ChucNangPhu;
 
 /**
@@ -43,7 +42,10 @@ public class Top extends Frame {
 
     @Override
     public void setRecyclerView() {
-
+        ArrayList<Object> objects=new ArrayList<>();
+        objects.addAll(sinhViens);
+        ListSinhVien listSinhVien=new ListSinhVien(recyclerView,objects,null,11,(Main) getActivity());
+        recyclerView.setAdapter(listSinhVien);
     }
 
     @Override
