@@ -55,6 +55,10 @@ public class DuongSQLite {
 
 
     }
+    public void runQuery(String s) {
+        database.execSQL(s);
+    }
+
     public boolean checkDataBase(String pathDatabase){
         try {
             return new File(pathDatabase).exists();

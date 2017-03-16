@@ -380,10 +380,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             khoas=Config.getKhoaByJson(jsonKhoas);
             lops=Config.getLopByJson(jsonLops);
             // chèn json dữ liệu vào csdl
-            duLieu.insertTopHe(jsonHes);
-            duLieu.insertTopKhoa(jsonKhoas);
-            duLieu.insertTopLop(jsonLops);
-            duLieu.insertTopNganh(jsonNganhs);
+            duLieu.insertTabs(jsonNganhs,jsonHes,jsonKhoas,jsonLops);
             //lấy cá lượt truy cập và ng dùng
             JSONObject jsonObjectLuotTruyCap=new JSONObject(jsonLuotTruyCap);
             JSONArray jsonArrayLuotTruyCap=jsonObjectLuotTruyCap.getJSONArray("data");

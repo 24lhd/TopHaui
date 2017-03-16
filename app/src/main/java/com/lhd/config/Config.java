@@ -1,9 +1,11 @@
 package com.lhd.config;
 
+import com.google.gson.Gson;
 import com.lhd.obj.He;
 import com.lhd.obj.Khoa;
 import com.lhd.obj.Lop;
 import com.lhd.obj.Nganh;
+import com.lhd.obj.SinhVien;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -106,6 +108,30 @@ public class Config {
                 ChucNangPhu.showLog(he.toString());
             }
             return hes;
+        } catch (JSONException e) {
+        }
+        return null;
+    }
+    public static ArrayList<SinhVien> getArraySinhVienByJson(String jsonTop) {
+        ArrayList<SinhVien> sinhViens = new ArrayList<>();
+        try {
+            Gson gson=new Gson();
+            JSONObject jsonObject= new JSONObject(jsonTop);
+            int jsonObjectHesStatust = jsonObject.getInt("status");
+            String jsonObjectHesMSG = jsonObject.getString("msg");
+            ChucNangPhu.showLog(jsonObjectHesMSG);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+            if (jsonObjectHesStatust != 1) {
+                ChucNangPhu.showLog("getHesByJson fail true khong lay duoc du liẹu");
+                return null;
+            }
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                SinhVien sinhVien= gson.fromJson(object.toString(),SinhVien.class);
+                sinhViens.add(sinhVien);
+                ChucNangPhu.showLog(sinhVien.toString());
+            }
+            return sinhViens;
         } catch (JSONException e) {
         }
         return null;
