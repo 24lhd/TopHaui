@@ -11,6 +11,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import duong.ChucNangPhu;
@@ -44,6 +46,32 @@ public class Config {
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-tu-chon?action=p2&p=1&ps=500&exp=rownb&dir=1&s=" + msv;
     }
 
+    /**
+     * laasy top 100 sinh theo tóp hệ gồm mã hệ là hệ gì và năm mấy
+     * @param mahe
+     * @param nam
+     * @return
+     */
+    public static String getLinkTopHe(String mahe, String nam) {
+        return "https://topcongnghiep.herokuapp.com/api/tophe/"+mahe+"/"+nam;
+    }
+    public static String getLinkTopNganh(String mangang, String nam) {
+
+        return  "https://topcongnghiep.herokuapp.com/api/topnganh/"+mangang+"/"+nam;
+    }
+    public static String getLinkTopKhoa(String k,String nbatdau, String nam) {
+
+        return "https://topcongnghiep.herokuapp.com/api/topkhoa/"+k+"/"+nbatdau+"/"+nam;
+    }
+    public static String getLinkTopLop(String lop,String khoa ) {
+            return "https://topcongnghiep.herokuapp.com/api/toplop/"+urlencode(lop)+"/"+urlencode(khoa);
+    }
+    public static String urlencode(String original) {
+        try {
+            return URLEncoder.encode(original, "utf-8").replace("+", "%20").replace("*", "%2A").replace("%7E", "~");}
+        catch(UnsupportedEncodingException e) {}
+        return null;
+    }
     public static ArrayList<Nganh> getNganhByJson(String jsonNganhs) {
 
         try {ArrayList<Nganh> nganhs=new ArrayList<>();
@@ -53,7 +81,6 @@ public class Config {
                 JSONObject jsonObject = jsonArrayNganhs.getJSONObject(i);
                 Nganh nganh = new Nganh(jsonObject.getString("manganh"),jsonObject.getString("nam"));
                 nganhs.add(nganh);
-                ChucNangPhu.showLog(nganh.toString());
             }
             return nganhs;
         } catch (Exception e) {}
@@ -69,7 +96,6 @@ public class Config {
                 JSONObject jsonO=jsonArrayKhoa.getJSONObject(i);
                 Khoa khoa=new Khoa(jsonO.getString("k"),jsonO.getString("nbatdau"),jsonO.getString("nam"));
                 khoas.add(khoa);
-                ChucNangPhu.showLog(khoa.toString());
             }
             return khoas;
         } catch (Exception e) {}
@@ -84,7 +110,6 @@ public class Config {
                 JSONObject jsonO=jsonArrayKhoa.getJSONObject(i);
                 Lop lop=new Lop(jsonO.getString("lop"),jsonO.getString("khoa"));
                 lops.add(lop);
-                ChucNangPhu.showLog(lop.toString());
             }
             return lops;
         } catch (Exception e) {}
@@ -105,7 +130,6 @@ public class Config {
                 JSONObject jsonObject = jsonArrayHes.getJSONObject(i);
                 He he = new He(jsonObject.getString("mahe"), jsonObject.getString("tenhe"), jsonObject.getString("nam"));
                 hes.add(he);
-                ChucNangPhu.showLog(he.toString());
             }
             return hes;
         } catch (JSONException e) {
@@ -119,7 +143,6 @@ public class Config {
             JSONObject jsonObject= new JSONObject(jsonTop);
             int jsonObjectHesStatust = jsonObject.getInt("status");
             String jsonObjectHesMSG = jsonObject.getString("msg");
-            ChucNangPhu.showLog(jsonObjectHesMSG);
             JSONArray jsonArray = jsonObject.getJSONArray("data");
             if (jsonObjectHesStatust != 1) {
                 ChucNangPhu.showLog("getHesByJson fail true khong lay duoc du liẹu");
@@ -129,7 +152,6 @@ public class Config {
                 JSONObject object = jsonArray.getJSONObject(i);
                 SinhVien sinhVien= gson.fromJson(object.toString(),SinhVien.class);
                 sinhViens.add(sinhVien);
-                ChucNangPhu.showLog(sinhVien.toString());
             }
             return sinhViens;
         } catch (JSONException e) {

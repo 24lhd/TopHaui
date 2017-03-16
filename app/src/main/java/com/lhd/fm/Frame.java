@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.baoyz.widget.PullRefreshLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.NativeExpressAdView;
-import com.lhd.db.SQLiteManager;
+import com.lhd.db.DuLieu;
 import com.lhd.obj.SinhVien;
 import com.lhd.tophaui.R;
 
@@ -43,18 +43,15 @@ public abstract class Frame extends Fragment {
     private WebView webView;
     private  AlertDialog.Builder builder;
     private View viewAd;
-    protected SQLiteManager sqLiteManager;
     protected PullRefreshLayout pullRefresh;
     protected SinhVien sv;
     protected ArrayList<Object> objects;
+    protected DuLieu dulieu;
 
     public void loadNativeExpressAt( NativeExpressAdView nativeExpressAdView) {
         if (isOnline(getActivity()))
         nativeExpressAdView.loadAd(new AdRequest.Builder().build());
     }
-
-
-
     public LayoutInflater getLayoutInflater() {
         return layoutInflater;
     }
@@ -158,7 +155,7 @@ public abstract class Frame extends Fragment {
 
     public void initView(View view) {
         pullRefresh= (PullRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        sqLiteManager=new SQLiteManager(getContext());
+        dulieu=new DuLieu(getContext());
 //        try {sv= (SinhVien) getArguments().getSerializable(MainActivity.SINH_VIEN);
 //        }catch (NullPointerException e){}
         progressBar= (ProgressBar) view.findViewById(R.id.pg_loading);

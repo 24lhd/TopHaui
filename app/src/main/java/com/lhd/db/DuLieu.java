@@ -1,5 +1,6 @@
 package com.lhd.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
@@ -9,6 +10,7 @@ import com.google.gson.Gson;
 import com.lhd.config.Config;
 import com.lhd.obj.DiemHocTap;
 import com.lhd.obj.He;
+import com.lhd.obj.ItemNotiDTTC;
 import com.lhd.obj.Khoa;
 import com.lhd.obj.Lop;
 import com.lhd.obj.Nganh;
@@ -26,7 +28,10 @@ import duong.sqlite.DuongSQLite;
 public class DuLieu {
     private Context context;
 
-
+    public static final String CREATE_TABLE_NOTIDTTC="CREATE TABLE IF NOT EXISTS `notidttc`(" +
+            "`stt`INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "`link`TEXT ," +
+            "`title`TEXT );";
     private Gson gson;
 
     //------------------------------------------------------Điểm học tập-------------------------------------------------------------
@@ -78,7 +83,7 @@ public class DuLieu {
     }
 //-----------------------------------------------------Chèn dữ liệu các tab vào cơ sở dữ liệu-------------------------------------------------------------
    // chèn vào dữ liệu dạng json khi khỏi tạo dữ liệu
-public void insertTabs(int tab_item,String jsonTabTop) {
+public void insertTabs(String tab_item,String jsonTabTop) {
         openDatabases();
         duongSQLite.getDatabase().execSQL("DELETE FROM `tab_top` WHERE `id_item`='" + tab_item + "';");
         duongSQLite.getDatabase().execSQL("INSERT INTO `tab_top`(`stt`,`id_item`,`tab_top`) VALUES (NULL,'" + tab_item + "','" + jsonTabTop + "');");
@@ -186,27 +191,48 @@ public void insertTabs(int tab_item,String jsonTabTop) {
         gson = new Gson();
     }
 
-    public String getNotiDTTC() {
+    public ArrayList<ItemNotiDTTC> getNotiDTTC() {
         try {
+            ArrayList<ItemNotiDTTC> itemNotiDTTCs=new ArrayList<>();
             openDatabases();
-            Cursor cursor = duongSQLite.getDatabase().query("notidttc", null, null, null, null, null, null);
+            Cursor cursor=duongSQLite.getDatabase().query("notidttc",null,null,null,null,null,null);
             cursor.getCount();// tra ve so luong ban ghi no ghi dc
             cursor.getColumnNames();// 1 mang cac cot
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
-            int tenSV = cursor.getColumnIndex("title");
-            int maSV = cursor.getColumnIndex("link");
+            int tenSV=cursor.getColumnIndex("title");
+            int maSV=cursor.getColumnIndex("link");
+            while (!cursor.isAfterLast()){
+                itemNotiDTTCs.add(new ItemNotiDTTC(cursor.getString(maSV),cursor.getString(tenSV)));
+                cursor.moveToNext();
+            }
             closeDatabases();
-            return "";
-        } catch (CursorIndexOutOfBoundsException e) {
-            Log.e("faker", "getNotiDTTC");
+            return itemNotiDTTCs ;
+        }catch (CursorIndexOutOfBoundsException e){
+            Log.e("faker","getNotiDTTC");
             return null;
         }
     }
+    public void deleteItemNotiDTTC() {
+        try {
+            openDatabases();
+            duongSQLite.getDatabase().delete("notidttc",null,null);
+            closeDatabases();
+        }catch (Exception e){}
 
+    }
     private void closeDatabases() {
         duongSQLite.cloneDatabase();
     }
-
+    public long insertItemNotiDTTC(ItemNotiDTTC itemNotiDTTC){
+        long id = 0;
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("link",itemNotiDTTC.getLink());
+        contentValues.put("title",itemNotiDTTC.getTitle());
+        openDatabases();
+        id=duongSQLite.getDatabase().insert("notidttc", null, contentValues);
+        closeDatabases();
+        return id;
+    }
     private void openDatabases() {
         duongSQLite.createOrOpenDataBases(context, Config.DATABASE_NAME);
         duongSQLite.runQuery(createTBDiemHocTap);
@@ -214,6 +240,8 @@ public void insertTabs(int tab_item,String jsonTabTop) {
         duongSQLite. runQuery(createTBDataTop);
 
         duongSQLite. runQuery(createTBTabTop);
+
+        duongSQLite.runQuery(CREATE_TABLE_NOTIDTTC);
     }
 
 

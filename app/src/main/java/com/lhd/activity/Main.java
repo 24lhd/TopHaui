@@ -68,16 +68,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private static final int CODE_RESULT_LOGIN = 10;
     public static final String SINH_VIEN="sinh vien";
     private static final String LOG_INFOR_SV = "info_sinh_vien";
-    public static final String KEY_TOP_HE = "top he";
+    public static final String LINK_TOP = "linnk top api";
+    public static final String ID_TAB = "id_tab";
     private FrameMore frameMore;
 
     public ArrayList<Lop> getLops() {
         return lops;
     }
 
-    public static final String KEY_TOP_KHOA = "top khoa";
-    public static final String KEY_TOP_NGANH = "top nganh";
-    public static final String KEY_TOP_LOP = "top lop";
     private static final String STATE_UI = "state_ui";
     private PackageInfo info;
     private AppLog appLog;
@@ -333,7 +331,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     String jsonLops = (new DuongHTTP()).getHTTP(Config.GET_LOP);
                     setNganhsAndHes(jsonNganhs,jsonHes,jsonLuotTruyCap,jsonKhoas,jsonLops);
                 } catch (Exception e) {
-                    fail=true;
+                    loadTabTopFromDatabase();
                     ChucNangPhu.showLog("Exception doInBackground");
                 }
                 return null;
@@ -348,6 +346,20 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }.execute();
 
     }
+
+    private void loadTabTopFromDatabase() {
+        hes= duLieu.getTabTopHes();
+        if (hes==null){
+            fail=true;
+            ChucNangPhu.showLog("hes==null");
+        }
+        nganhs=duLieu.getTabTopNganh();
+        khoas=duLieu.getTabTopKhoa();
+        lops=duLieu.getTabTopLop();
+
+
+    }
+
     private ArrayList<He> hes;
     private ArrayList<Nganh> nganhs;
 
@@ -370,7 +382,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public ArrayList<Khoa> getKhoas() {
         return khoas;
     }
-
+    public static  final String KEY_TOP_HE="1";
+    public static  final String KEY_TOP_KHOA="2";
+    public static  final String KEY_TOP_NGANH="3";
+    public static  final String KEY_TOP_LOP="4";
+    public static  final String KEY_TOP_CONTENT="tab top cick";
     private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap, String jsonKhoas,String jsonLops) {
         this.fail=false;
         try {
@@ -380,7 +396,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             khoas=Config.getKhoaByJson(jsonKhoas);
             lops=Config.getLopByJson(jsonLops);
             // chèn json dữ liệu vào csdl
-            duLieu.insertTabs(jsonNganhs,jsonHes,jsonKhoas,jsonLops);
+            duLieu.insertTabs(KEY_TOP_HE,jsonHes);
+            duLieu.insertTabs(KEY_TOP_KHOA,jsonKhoas);
+            duLieu.insertTabs(KEY_TOP_NGANH,jsonNganhs);
+            duLieu.insertTabs(KEY_TOP_LOP,jsonLops);
             //lấy cá lượt truy cập và ng dùng
             JSONObject jsonObjectLuotTruyCap=new JSONObject(jsonLuotTruyCap);
             JSONArray jsonArrayLuotTruyCap=jsonObjectLuotTruyCap.getJSONArray("data");

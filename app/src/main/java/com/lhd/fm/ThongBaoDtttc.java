@@ -17,7 +17,7 @@ public class ThongBaoDtttc extends Frame {
     private ArrayList<ItemNotiDTTC> itemNotiDTTCs;
     public void checkDatabase() {
         showProgress();
-        itemNotiDTTCs=sqLiteManager.getNotiDTTC();
+        itemNotiDTTCs=dulieu.getNotiDTTC();
         if (!itemNotiDTTCs.isEmpty()){
             showRecircleView();
             setRecyclerView();
@@ -45,9 +45,9 @@ public class ThongBaoDtttc extends Frame {
                 itemNotiDTTCs= (ArrayList<ItemNotiDTTC>) msg.obj;
                 setRecyclerView();
                 if (!itemNotiDTTCs.isEmpty()){
-                    sqLiteManager.deleteItemNotiDTTC();
+                    dulieu.deleteItemNotiDTTC();
                     for (ItemNotiDTTC itemNotiDTTC:itemNotiDTTCs) {
-                        sqLiteManager.insertItemNotiDTTC(itemNotiDTTC);
+                        dulieu.insertItemNotiDTTC(itemNotiDTTC);
                     }
                 }
 
