@@ -147,8 +147,8 @@ public class BieuDo extends Fragment {
         entries1.add(new RadarEntry(d7));
         entries1.add(new RadarEntry(d8));
         RadarDataSet set1 = new RadarDataSet(entries1, "Tổng kết điểm hiện tại");
-        set1.setColor(main.getColorApp());
-        set1.setFillColor(main.getColorApp());
+        set1.setColor(main.getBg_app());
+        set1.setFillColor(main.getBg_app());
         set1.setDrawFilled(true);
         set1.setFillAlpha(40);
         set1.setLineWidth(1f);
@@ -163,11 +163,11 @@ public class BieuDo extends Fragment {
         mChart.setData(data);
         mChart.invalidate();
         TextView tvTen = (TextView) view.findViewById(R.id.tv_ten);
-        tvTen.setTextColor(main.getBg_app());
+        tvTen.setTextColor(main.getColorApp());
         tvTen.setText(sinhVien.getTen());
         TextView tvTT = (TextView) view.findViewById(R.id.tv_tt);
-        tvTT.setTextColor(main.getTab_select_color());
-        tvTT.setText(sinhVien.getLop()+"\n"+sinhVien.getKhoa()+"\nSinh viên năm "+sinhVien.getNam()+" Tích lũy "+sinhVien.getTl());
+        tvTT.setTextColor(main.getBg_app());
+        tvTT.setText(sinhVien.getLop()+"\n"+sinhVien.getKhoa()+" SV năm "+sinhVien.getNam()+"\nTích lũy "+sinhVien.getTl());
     }
 
 

@@ -136,6 +136,7 @@ public class FrameCaNhan extends Fragment {
     }
 
     private void setViewOnline() {
+        setViewSinhVienByMSV(sinhVien.getMa());
         linearLayout.setVisibility(View.VISIBLE);
         tvOff.setVisibility(View.GONE);
         tabLayout.getTabAt(0).select();
@@ -151,7 +152,7 @@ public class FrameCaNhan extends Fragment {
         public android.support.v4.app.Fragment getItem(int position) {
             Bundle bundle = new Bundle();
 
-            if (position == 3) {
+            if (position == 2) {
                 TopCacLoai topCacLoaiFragment = new TopCacLoai();
                 bundle.putString(Main.LINK_TOP, main.getConfig().getLinkTopLop(sinhVien.getLop(),sinhVien.getKhoa()));
                 ChucNangPhu.showLog(main.getConfig().getLinkTopLop(sinhVien.getLop(),sinhVien.getKhoa()));
@@ -159,36 +160,34 @@ public class FrameCaNhan extends Fragment {
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;
             }
-            if (position == 2) {
-                BieuDo bieuDo=new BieuDo();
+            if (position == 1) {
+                KetQuaHocTapSinhVien ketQuaHocTapSinhVien = new KetQuaHocTapSinhVien();
                 bundle.putSerializable(SINH_VIEN,sinhVien);
-                bieuDo.setArguments(bundle);
-                return bieuDo;
+                ketQuaHocTapSinhVien.setArguments(bundle);
+                return ketQuaHocTapSinhVien;
             }
-
-            KetQuaHocTapSinhVien ketQuaHocTapSinhVien = new KetQuaHocTapSinhVien();
+            BieuDo bieuDo=new BieuDo();
             bundle.putSerializable(SINH_VIEN,sinhVien);
-            ketQuaHocTapSinhVien.setArguments(bundle);
-            return ketQuaHocTapSinhVien;
+            bieuDo.setArguments(bundle);
+            return bieuDo;
+
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 0) {
-                return "Thông tin"+"\n"+"sinh viên";
+                return "Biểu đồ kết quả của\n"+sinhVien.getTen();
             }else if (position == 1) {
-                return "Kết quả"+"\n"+"học tập";
-            }else if (position == 2) {
-                return "Biểu đồ"+"\n"+"kết quả";
-            } else if (position == 3) {
+                return "Kết quả học tập của \n"+sinhVien.getTen();
+            } else if (position == 2) {
                 return sinhVien.getLop()+"\n"+sinhVien.getKhoa();
             }
-            return "Kết quả học tập";
+            return "Biểu đồ"+"\n"+"kết quả";
         }
     }
 }
