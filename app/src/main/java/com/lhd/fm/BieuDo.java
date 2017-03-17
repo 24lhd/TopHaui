@@ -1,6 +1,5 @@
 package com.lhd.fm;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -102,7 +101,6 @@ public class BieuDo extends Fragment {
                     break;
             }
         }
-        mChart.setBackgroundColor(Color.WHITE);
         mChart.getDescription().setEnabled(false);
         mChart.setWebLineWidth(1f);
         mv.setChartView(mChart); // For bounds control
@@ -162,7 +160,6 @@ public class BieuDo extends Fragment {
         RadarData data = new RadarData(sets);
         data.setValueTextSize(8f);
         data.setDrawValues(false);
-        data.setValueTextColor(Color.WHITE);
         mChart.setData(data);
         mChart.invalidate();
         TextView tvTen = (TextView) view.findViewById(R.id.tv_ten);
@@ -170,7 +167,7 @@ public class BieuDo extends Fragment {
         tvTen.setText(sinhVien.getTen());
         TextView tvTT = (TextView) view.findViewById(R.id.tv_tt);
         tvTT.setTextColor(main.getTab_select_color());
-        tvTT.setText(sinhVien.getLop()+"\n"+sinhVien.getKhoa()+"\nSinh viên năm "+sinhVien.getNam());
+        tvTT.setText(sinhVien.getLop()+"\n"+sinhVien.getKhoa()+"\nSinh viên năm "+sinhVien.getNam()+" Tích lũy "+sinhVien.getTl());
     }
 
 
