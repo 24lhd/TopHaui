@@ -1,5 +1,6 @@
 package com.lhd.fm;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
@@ -34,7 +35,7 @@ public class KetQuaHocTapSinhVien extends Frame {
                     return;
                 }
             } catch (NullPointerException e) {
-                startParser();
+//                startParser();
             }
         }
     };
@@ -52,12 +53,12 @@ public class KetQuaHocTapSinhVien extends Frame {
 
     @Override
     public void setRecyclerView() {
-        showRecircleView();
         ArrayList<Object> objects = new ArrayList<>();
         objects.addAll(diemHocTaps);
         ChucNangPhu.showLog("diemHocTaps  setRecyclerView"+diemHocTaps.size());
         ListDiemHocTap listDiemHocTap = new ListDiemHocTap(recyclerView, objects, null,Main.ADS_INDEX_ITEM, (Main) getActivity(), diemHocTaps);
         recyclerView.setAdapter(listDiemHocTap);
+        showRecircleView();
     }
 
     @Override
@@ -66,16 +67,25 @@ public class KetQuaHocTapSinhVien extends Frame {
         main = (Main) getActivity();
         sinhVien= (SinhVien) getArguments().getSerializable(SINH_VIEN);
         msv = sinhVien.getMa();
-        ChucNangPhu.showLog("checkDatabase "+sinhVien.toString());
         if (isOnline(getActivity()) && geted == false) {
             loadData();
             return;
         }
-        diemHocTaps = dulieu.getListDiemHocTap(msv);
-        if (diemHocTaps != null) {
-            ChucNangPhu.showLog("diemHocTaps " + diemHocTaps.size());
-            setRecyclerView();
-        } else loadData();
+       (new LoadData()).execute();
     }
+    class LoadData extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
 
+            diemHocTaps = dulieu.getListDiemHocTap(msv);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (diemHocTaps != null) {
+                ChucNangPhu.showLog("diemHocTaps " + diemHocTaps.size());
+                setRecyclerView();
+            } else loadData();
+        }
+    }
 }

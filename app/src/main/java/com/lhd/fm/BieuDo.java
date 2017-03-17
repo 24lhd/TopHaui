@@ -166,11 +166,11 @@ public class BieuDo extends Fragment {
         mChart.setData(data);
         mChart.invalidate();
         TextView tvTen = (TextView) view.findViewById(R.id.tv_ten);
-        tvTen.setTextColor(main.getColorApp());
+        tvTen.setTextColor(main.getBg_app());
         tvTen.setText(sinhVien.getTen());
         TextView tvTT = (TextView) view.findViewById(R.id.tv_tt);
         tvTT.setTextColor(main.getTab_select_color());
-        tvTT.setText(sinhVien.getLop()+"\n"+sinhVien.getKhoa());
+        tvTT.setText(sinhVien.getLop()+"\n"+sinhVien.getKhoa()+"\nSinh viên năm "+sinhVien.getNam());
     }
 
 

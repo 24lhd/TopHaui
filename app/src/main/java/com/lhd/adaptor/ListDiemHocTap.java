@@ -88,9 +88,9 @@ public class ListDiemHocTap extends AdaptorResycleViewADS {
         diemHocTapHover.id_so_tin.setText(diemHocTap.getSoTin());
 
 
-        diemHocTapHover.id_ten_mon.setTextColor(activity.getColorApp());
+        diemHocTapHover.id_ten_mon.setTextColor(activity.getBg_app());
         diemHocTapHover.id_so_tin.setTextColor(activity.getTab_select_color());
-        diemHocTapHover.id_diem_so.setTextColor(activity.getTab_select_color());
+        diemHocTapHover.id_diem_so.setTextColor(activity.getColorApp());
 
 
 

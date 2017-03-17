@@ -92,7 +92,7 @@ public class ListSinhVien extends AdaptorResycleViewADS {
         sinhVienHover.id_nam.setText(sinhVien.getNam());
 
         sinhVienHover.id_ten_sv.setTextColor(activity.getBg_app());
-        sinhVienHover.id_lop.setTextColor(activity.getTab_select_color());
+        sinhVienHover.id_lop.setTextColor(activity.getColorApp());
         sinhVienHover.id_nam.setTextColor(activity.getTab_select_color());
         sinhVienHover.id_khoa.setTextColor(activity.getTab_select_color());
 

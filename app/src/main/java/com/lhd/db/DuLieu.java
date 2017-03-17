@@ -95,6 +95,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
             "`id_item`TEXT, "  +
             "`tab_top`TEXT" +
             ");";
+    Config config;
     public ArrayList<He> getTabTopHes() {
         try {
             openDatabases();
@@ -102,7 +103,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
             Cursor cursor = duongSQLite.getDatabase().query("tab_top", null, "id_item=?",id_item, null, null, null);
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int item = cursor.getColumnIndex("tab_top");
-            ArrayList<He> hes = Config.getHesByJson(cursor.getString(item));
+            ArrayList<He> hes = config.getHesByJson(cursor.getString(item));
             closeDatabases();
             return hes;
         } catch (CursorIndexOutOfBoundsException e) {
@@ -117,7 +118,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
             Cursor cursor = duongSQLite.getDatabase().query("tab_top", null, "id_item=?",id_item, null, null, null);
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int item = cursor.getColumnIndex("tab_top");
-            ArrayList<Khoa> khoas = Config.getKhoaByJson(cursor.getString(item));
+            ArrayList<Khoa> khoas = config.getKhoaByJson(cursor.getString(item));
             closeDatabases();
             return khoas;
         } catch (CursorIndexOutOfBoundsException e) {
@@ -132,7 +133,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
             Cursor cursor = duongSQLite.getDatabase().query("tab_top", null, "id_item=?",id_item, null, null, null);
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int item = cursor.getColumnIndex("tab_top");
-            ArrayList<Nganh> nganhs = Config.getNganhByJson(cursor.getString(item));
+            ArrayList<Nganh> nganhs = config.getNganhByJson(cursor.getString(item));
             closeDatabases();
             return nganhs;
         } catch (CursorIndexOutOfBoundsException e) {
@@ -147,7 +148,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
             Cursor cursor = duongSQLite.getDatabase().query("tab_top", null, "id_item=?",id_item, null, null, null);
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int item = cursor.getColumnIndex("tab_top");
-            ArrayList<Lop> lops = Config.getLopByJson(cursor.getString(item));
+            ArrayList<Lop> lops = config.getLopByJson(cursor.getString(item));
             closeDatabases();
             return lops;
         } catch (CursorIndexOutOfBoundsException e) {
@@ -174,7 +175,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
             Cursor cursor = duongSQLite.getDatabase().query("data_top", null, "id_tab=?",idTab , null, null, null);
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int item = cursor.getColumnIndex("data_top");
-            ArrayList<SinhVien> sinhViens = Config.getArraySinhVienByJson(cursor.getString(item));
+            ArrayList<SinhVien> sinhViens = config.getArraySinhVienByJson(cursor.getString(item));
             closeDatabases();
             return sinhViens;
         } catch (CursorIndexOutOfBoundsException e) {
@@ -190,6 +191,7 @@ public void insertTabs(String tab_item,String jsonTabTop) {
         this.context = context;
         openDatabases();
         gson = new Gson();
+        config=new Config();
     }
 
     public ArrayList<ItemNotiDTTC> getNotiDTTC() {

@@ -19,7 +19,6 @@ import org.jsoup.select.Elements;
 import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
-import static com.lhd.config.Config.postToServer;
 import static duong.ChucNangPhu.getJSONByObj;
 
 /**
@@ -33,12 +32,13 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
         private DuLieu duongSQLite;
         private Handler handler;
         private DuongHTTP duongHTTP;
-
+    Config config;
         public ParserSinhVien(Handler handler, Context context) {
             this.handler=handler;
             this.duongSQLite=new DuLieu(context);
             this.context=context;
             duongHTTP=new DuongHTTP();
+            config=new Config();
 
         }
         @Override
@@ -47,10 +47,10 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
             Document docLinkMonHocConThieu = null;
             Document docLinkMonHocTuChon = null;
             try {
-                ChucNangPhu.showLog("msv "+Config.getLinkMonHocBatBuoc(params[0]));
-                docMonHocBatBuoc = Jsoup.connect(Config.getLinkMonHocBatBuoc(params[0])).get();
-                docLinkMonHocConThieu = Jsoup.connect(Config.getLinkMonHocConThieu(params[0])).get();
-                docLinkMonHocTuChon = Jsoup.connect(Config.getLinkMonHocTuChon(params[0])).get();
+                ChucNangPhu.showLog("msv "+config.getLinkMonHocBatBuoc(params[0]));
+                docMonHocBatBuoc = Jsoup.connect(config.getLinkMonHocBatBuoc(params[0])).get();
+                docLinkMonHocConThieu = Jsoup.connect(config.getLinkMonHocConThieu(params[0])).get();
+                docLinkMonHocTuChon = Jsoup.connect(config.getLinkMonHocTuChon(params[0])).get();
                 /**
                  * lấy thông tin cá nhân ở trang docMonHocBatBuoc
                  */
@@ -123,7 +123,7 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                 message.obj=sinhVien;
                 handler.sendMessage(message);
                 try {
-                    postToServer(sinhVien);
+                    config.postToServer(sinhVien);
                 } catch (Exception e) {
                 }
             }else{

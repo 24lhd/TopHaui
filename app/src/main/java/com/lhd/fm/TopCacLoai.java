@@ -1,5 +1,6 @@
 package com.lhd.fm;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
@@ -34,7 +35,7 @@ public class TopCacLoai extends Frame {
                     showRecircleView();
                 }else showTextNull();
             }catch (NullPointerException e){
-                startParser();
+//                startParser();
             }
         }
     };
@@ -51,11 +52,11 @@ public class TopCacLoai extends Frame {
 
     @Override
     public void setRecyclerView() {
-        showRecircleView();
         ArrayList<Object> objects=new ArrayList<>();
         objects.addAll(sinhViens);
         ListSinhVien listSinhVien=new ListSinhVien(recyclerView,objects,null,ADS_INDEX_ITEM,(Main) getActivity(),sinhViens);
         recyclerView.setAdapter(listSinhVien);
+        showRecircleView();
     }
 
     @Override
@@ -67,10 +68,19 @@ public class TopCacLoai extends Frame {
             startParser();
             return;
         }
-        sinhViens=dulieu.getTopSinhVienTabTopByIdTab(id_tab);
-        if (sinhViens!=null){
-            ChucNangPhu.showLog("sinhViens "+sinhViens.size());
-            setRecyclerView();
-        }else  loadData();
+        (new LoadData()).execute();
+    }
+    class LoadData extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... params) {
+            sinhViens=dulieu.getTopSinhVienTabTopByIdTab(id_tab);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (sinhViens!=null){
+                setRecyclerView();
+            }else  loadData();
+        }
     }
 }

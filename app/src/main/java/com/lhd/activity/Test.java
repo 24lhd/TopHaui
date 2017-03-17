@@ -9,15 +9,15 @@ import android.util.Log;
 import android.view.View;
 
 import com.google.gson.Gson;
-import com.lhd.config.Config;
 import com.lhd.db.DuLieu;
 import com.lhd.obj.DiemHocTap;
 import com.lhd.obj.SinhVien;
 import com.mancj.slideup.SlideUp;
-import org.jsoup.Jsoup;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
@@ -57,9 +57,9 @@ public class Test extends Activity {
             Document docLinkMonHocConThieu = null;
             Document docLinkMonHocTuChon = null;
             try {
-                docMonHocBatBuoc = Jsoup.connect(Config.getLinkMonHocBatBuoc(params[0])).get();
-                docLinkMonHocConThieu = Jsoup.connect(Config.getLinkMonHocConThieu(params[0])).get();
-                docLinkMonHocTuChon = Jsoup.connect(Config.getLinkMonHocTuChon(params[0])).get();
+//                docMonHocBatBuoc = Jsoup.connect(Config.getLinkMonHocBatBuoc(params[0])).get();
+//                docLinkMonHocConThieu = Jsoup.connect(Config.getLinkMonHocConThieu(params[0])).get();
+//                docLinkMonHocTuChon = Jsoup.connect(Config.getLinkMonHocTuChon(params[0])).get();
                 /**
                  * lấy thông tin cá nhân ở trang docMonHocBatBuoc
                  */

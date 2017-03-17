@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lhd.activity.Main;
-import com.lhd.config.Config;
 import com.lhd.obj.He;
 import com.lhd.obj.Khoa;
 import com.lhd.obj.Lop;
@@ -116,27 +115,27 @@ public class FrameTopCacLoai extends Fragment{
             Bundle bundle=new Bundle();
             if (content.contains(Main.KEY_TOP_HE)){
                 He he=hes.get(position);
-                bundle.putString(Main.LINK_TOP, Config.getLinkTopHe(he.getMahe(),he.getNam()));
+                bundle.putString(Main.LINK_TOP, main.getConfig().getLinkTopHe(he.getMahe(),he.getNam()));
                 bundle.putString(Main.ID_TAB, he.getMahe()+he.getNam());
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;
             }else if (content.contains(Main.KEY_TOP_NGANH)){
                 Nganh nganh=nganhs.get(position);
-                bundle.putString(Main.LINK_TOP, Config.getLinkTopNganh(nganh.getManganh(),nganh.getNam()));
+                bundle.putString(Main.LINK_TOP,  main.getConfig().getLinkTopNganh(nganh.getManganh(),nganh.getNam()));
                 bundle.putString(Main.ID_TAB, nganh.getManganh()+nganh.getNam());
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;
             }else if (content.contains(Main.KEY_TOP_KHOA)){
                 Khoa khoa=khoas.get(position);
-                bundle.putString(Main.LINK_TOP, Config.getLinkTopKhoa(khoa.getKhoa(),khoa.getNbatdau(),khoa.getNam()));
+                bundle.putString(Main.LINK_TOP,  main.getConfig().getLinkTopKhoa(khoa.getKhoa(),khoa.getNbatdau(),khoa.getNam()));
                 bundle.putString(Main.ID_TAB, khoa.getKhoa()+khoa.getNbatdau()+khoa.getNam());
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;
             }
             else if (content.contains(Main.KEY_TOP_LOP)){
                 Lop lop=lops.get(position);
-                bundle.putString(Main.LINK_TOP, Config.getLinkTopLop(lop.getLop(),lop.getKhoa()));
-                ChucNangPhu.showLog(Config.getLinkTopLop(lop.getLop(),lop.getKhoa()));
+                bundle.putString(Main.LINK_TOP,  main.getConfig().getLinkTopLop(lop.getLop(),lop.getKhoa()));
+                ChucNangPhu.showLog( main.getConfig().getLinkTopLop(lop.getLop(),lop.getKhoa()));
                 bundle.putString(Main.ID_TAB, lop.getLop()+lop.getKhoa());
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;

@@ -36,15 +36,15 @@ public class Config {
     public static final String GET_KHOA = "https://topcongnghiep.herokuapp.com/api/khoa";
     public static final String GET_LOP = "https://topcongnghiep.herokuapp.com/api/lop";
 
-    public static String getLinkMonHocBatBuoc(String msv) {
+    public  String getLinkMonHocBatBuoc(String msv) {
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-bat-buoc?action=p1&p=1&ps=500&exp=rownb&dir=1&s=" + msv;
     }
 
-    public static String getLinkMonHocConThieu(String msv) {
+    public  String getLinkMonHocConThieu(String msv) {
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-con-thieu?action=p3&p=1&ps=500&exp=SubjectName&dir=1&s=" + msv;
     }
 
-    public static String getLinkMonHocTuChon(String msv) {
+    public  String getLinkMonHocTuChon(String msv) {
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-tu-chon?action=p2&p=1&ps=500&exp=rownb&dir=1&s=" + msv;
     }
 
@@ -54,27 +54,27 @@ public class Config {
      * @param nam
      * @return
      */
-    public static String getLinkTopHe(String mahe, String nam) {
+    public  String getLinkTopHe(String mahe, String nam) {
         return "https://topcongnghiep.herokuapp.com/api/tophe/"+mahe+"/"+nam;
     }
-    public static String getLinkTopNganh(String mangang, String nam) {
+    public  String getLinkTopNganh(String mangang, String nam) {
 
         return  "https://topcongnghiep.herokuapp.com/api/topnganh/"+mangang+"/"+nam;
     }
-    public static String getLinkTopKhoa(String k,String nbatdau, String nam) {
+    public  String getLinkTopKhoa(String k,String nbatdau, String nam) {
 
         return "https://topcongnghiep.herokuapp.com/api/topkhoa/"+k+"/"+nbatdau+"/"+nam;
     }
-    public static String getLinkTopLop(String lop,String khoa ) {
+    public  String getLinkTopLop(String lop,String khoa ) {
             return "https://topcongnghiep.herokuapp.com/api/toplop/"+urlencode(lop)+"/"+urlencode(khoa);
     }
-    public static String urlencode(String original) {
+    public  String urlencode(String original) {
         try {
             return URLEncoder.encode(original, "utf-8").replace("+", "%20").replace("*", "%2A").replace("%7E", "~");}
         catch(UnsupportedEncodingException e) {}
         return null;
     }
-    public static ArrayList<Nganh> getNganhByJson(String jsonNganhs) {
+    public  ArrayList<Nganh> getNganhByJson(String jsonNganhs) {
 
         try {ArrayList<Nganh> nganhs=new ArrayList<>();
             JSONObject jsonObjectNganhs = new JSONObject(jsonNganhs);
@@ -90,7 +90,7 @@ public class Config {
 
     }
 
-    public static ArrayList<Khoa> getKhoaByJson(String jsonKhoas) {
+    public  ArrayList<Khoa> getKhoaByJson(String jsonKhoas) {
         try {ArrayList<Khoa> khoas=new ArrayList<>();
             JSONObject jsonObjectKhoas=new JSONObject(jsonKhoas);
             JSONArray jsonArrayKhoa=jsonObjectKhoas.getJSONArray("data");
@@ -104,7 +104,7 @@ public class Config {
         return null;
     }
 
-    public static ArrayList<Lop> getLopByJson(String jsonLop) {
+    public  ArrayList<Lop> getLopByJson(String jsonLop) {
         try {ArrayList<Lop> lops=new ArrayList<>();
             JSONObject jsonObjectKhoas=new JSONObject(jsonLop);
             JSONArray jsonArrayKhoa=jsonObjectKhoas.getJSONArray("data");
@@ -118,7 +118,7 @@ public class Config {
         return null;
     }
 
-    public static ArrayList<He> getHesByJson(String jsonHes) {
+    public  ArrayList<He> getHesByJson(String jsonHes) {
         ArrayList<He> hes = new ArrayList<>();
         try {
             JSONObject jsonObjectHes = new JSONObject(jsonHes);
@@ -138,7 +138,7 @@ public class Config {
         }
         return null;
     }
-    public static ArrayList<SinhVien> getArraySinhVienByJson(String jsonTop) {
+    public  ArrayList<SinhVien> getArraySinhVienByJson(String jsonTop) {
         ArrayList<SinhVien> sinhViens = new ArrayList<>();
         try {
             Gson gson=new Gson();
@@ -161,7 +161,7 @@ public class Config {
         return null;
     }
 
-    public static void getSinhVienByJson(String jsonSinhVien) {
+    public  void getSinhVienByJson(String jsonSinhVien) {
         try {
 
         } catch (Exception e) {
@@ -172,7 +172,7 @@ public class Config {
      * @param sinhVien
      * @throws Exception
      */
-    public static void postToServer(final SinhVien sinhVien) throws Exception{
+    public  void postToServer(final SinhVien sinhVien) throws Exception{
         final Gson gson=new Gson();
         final String str=gson.toJson(sinhVien);
         new Thread(){

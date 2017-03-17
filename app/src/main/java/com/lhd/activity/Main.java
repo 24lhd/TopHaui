@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -35,8 +34,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.lhd.config.Config;
 import com.lhd.db.DuLieu;
-import com.lhd.fm.FrameThemChucNang;
 import com.lhd.fm.FrameCaNhan;
+import com.lhd.fm.FrameThemChucNang;
 import com.lhd.fm.FrameTopCacLoai;
 import com.lhd.fm.ThongBaoDtttc;
 import com.lhd.obj.He;
@@ -95,6 +94,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private int tabUISelect;
     private Toolbar toolbar;
     private int colorApp;
+    private RelativeLayout bgHeader;
 
     public int getColorApp() {
         return colorApp;
@@ -128,27 +128,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-            }
-        });
         drawer.setFitsSystemWindows(true);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -157,6 +136,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
+         bgHeader= (RelativeLayout) headerLayout.findViewById(R.id.id_bg_header);
+        bgHeader.setBackgroundColor(colorApp);
         tvNameStudent = (TextView) headerLayout.findViewById(R.id.hd_name_student);
         tvClassStudent = (TextView) headerLayout.findViewById(R.id.hd_name_class_student);
         layoutTime = (LinearLayout) headerLayout.findViewById(R.id.view_time);
@@ -164,14 +145,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         timeView = (TextView) headerLayout.findViewById(R.id.tv_time_conlai);
         setContentViewHeaderNavi(sinhVien.getTen(), sinhVien.getLop());
         startTimeView();
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        }else{
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//        }
         frameLayout = (FrameLayout) findViewById(R.id.frame_fragment);
         setUI(appLog.getValueByName(Main.this, STATE_UI, "StatusBar"),
                 appLog.getValueByName(Main.this, STATE_UI, "toolbar"),
@@ -435,15 +408,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public static final String KEY_TOP_NGANH = "3";
     public static final String KEY_TOP_LOP = "4";
     public static final String KEY_TOP_CONTENT = "tab top cick";
-
+    private Config config;
     private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap, String jsonKhoas, String jsonLops) {
         this.fail = false;
         try {
             // dịch các dữ liệu lấy từ api và trả về 1 mảng những đối tượng
-            hes = Config.getHesByJson(jsonHes);
-            nganhs = Config.getNganhByJson(jsonNganhs);
-            khoas = Config.getKhoaByJson(jsonKhoas);
-            lops = Config.getLopByJson(jsonLops);
+            hes = config.getHesByJson(jsonHes);
+            nganhs = config.getNganhByJson(jsonNganhs);
+            khoas = config.getKhoaByJson(jsonKhoas);
+            lops = config.getLopByJson(jsonLops);
             // chèn json dữ liệu vào csdl
             duLieu.insertTabs(KEY_TOP_HE, jsonHes);
             duLieu.insertTabs(KEY_TOP_KHOA, jsonKhoas);
@@ -489,12 +462,18 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return fail;
     }
 
+    public Config getConfig() {
+        return config;
+    }
+
     /**
      * kiểm tra xem log đã có mã sinh viên hay chưa, chưa có thì chạy lân activity đăng nhập để nhập mã sinh viên
      * nếu có rồi thì chạy giao diện chính và lấy dữ liệu sinh viên ở trong
      */
+
     private void checkLog() {
         try {
+            config=new Config();
             appLog = new AppLog();
             duLieu = new DuLieu(this);
             String jsonSinhVien = appLog.getValueByName(this, APP_LOG, LOG_INFOR_SV);
@@ -539,6 +518,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        toolbar.setTitle(item.getTitle());
         if (id == R.id.mn_log_out) {
             if (Conections.isOnline(this))
                 appLog.removeByName(this, APP_LOG, LOG_INFOR_SV);
@@ -584,6 +564,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         if (bar != null) {
             colorApp = Integer.parseInt(bar);
             toolbar.setBackgroundColor(colorApp);
+            bgHeader.setBackgroundColor(colorApp);
         }
         if (tabs != null) {
             tab_select_color = Integer.parseInt(tabs);
@@ -602,6 +583,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             if (frameThemChucNang != null)
                 frameThemChucNang.getTabLayout().setBackgroundColor(tab_select_color);
             if (frameCaNhan != null) {
+                frameCaNhan.getAppBarLayout().setBackgroundColor(tab_select_color);
                 frameCaNhan.getTabLayout().setBackgroundColor(tab_select_color);
             }
             tabUI.setBackgroundColor(tab_select_color);
@@ -628,6 +610,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 toolbar.setBackgroundColor(buttonColor.getColor());
                 colorApp = buttonColor.getColor();
                 appLog.putValueByName(this, STATE_UI, "toolbar", "" + buttonColor.getColor());
+                bgHeader.setBackgroundColor(colorApp);
                 break;
             case 2:
                 tab_select_color = buttonColor.getColor();
