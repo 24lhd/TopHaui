@@ -86,6 +86,14 @@ public class ListDiemHocTap extends AdaptorResycleViewADS {
         diemHocTapHover.id_diem_so.setText(diemHocTap.getThang10());
         diemHocTapHover.id_ma_mon.setText("["+diemHocTap.getMaMon()+"]");
         diemHocTapHover.id_so_tin.setText(diemHocTap.getSoTin());
+
+
+        diemHocTapHover.id_ten_mon.setTextColor(activity.getColorApp());
+        diemHocTapHover.id_so_tin.setTextColor(activity.getTab_select_color());
+        diemHocTapHover.id_diem_so.setTextColor(activity.getTab_select_color());
+
+
+
         diemHocTapHover.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

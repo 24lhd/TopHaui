@@ -113,14 +113,9 @@ public class FrameThemChucNang extends Fragment {
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             switch (position){
-
                 case 1:
-                    return new ThongBaoDtttc();
+                    return new GioHocLyThuyet();
                 case 2:
-                    return new GioHocLyThuyet();
-                case 3:
-                    return new GioHocLyThuyet();
-                case 4:
                     return new DiemChu();
                default:
                     return new ThongBaoDtttc();
@@ -128,18 +123,15 @@ public class FrameThemChucNang extends Fragment {
         }
         @Override
         public int getCount() {
-                return 5;
+                return 3;
         }
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position){
+
                 case 1:
-                    return "Tiền học đã đóng";
-                case 2:
-                    return "Tiền học chưa đóng";
-                case 3:
                     return "Giờ học lý thuyết";
-                case 4:
+                case 2:
                     return "Bảng điểm chữ";
                 default:
                     return "Thông báo từ DTTC";

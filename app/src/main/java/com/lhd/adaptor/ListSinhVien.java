@@ -84,11 +84,18 @@ public class ListSinhVien extends AdaptorResycleViewADS {
         final SinhVien sinhVien= (SinhVien) getListObject().get(position);
         sinhVienHover.id_stt.setText(""+(sinhViens.indexOf(sinhVien)+1));
         sinhVienHover.id_ten_sv.setText(sinhVien.getTen());
+
         sinhVienHover.id_lop.setText("Lớp "+sinhVien.getLop());
         sinhVienHover.id_msv.setText("["+sinhVien.getMa()+"]");
         sinhVienHover.id_khoa.setText(sinhVien.getKhoa());
         sinhVienHover.id_tl.setText(sinhVien.getTl());
         sinhVienHover.id_nam.setText(sinhVien.getNam());
+
+        sinhVienHover.id_ten_sv.setTextColor(activity.getBg_app());
+        sinhVienHover.id_lop.setTextColor(activity.getTab_select_color());
+        sinhVienHover.id_nam.setTextColor(activity.getTab_select_color());
+        sinhVienHover.id_khoa.setTextColor(activity.getTab_select_color());
+
         sinhVienHover.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

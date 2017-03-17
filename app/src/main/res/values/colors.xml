@@ -354,5 +354,6 @@
     <color name="colorFrey">#123</color>
     <color name="bg_rcv">#9ae4e4e4</color>
     <color name="colorTrongSuot">#00ffffff</color>
+    <color name="colorGrey">#a2a7abae</color>
 
 </resources>
