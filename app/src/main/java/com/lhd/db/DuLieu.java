@@ -66,13 +66,14 @@ public class DuLieu {
         try {
             openDatabases();
             String[] s = {masv};
-            Cursor cursor = duongSQLite.getDatabase().query("sv", null, "msv=?", s, null, null, null);
+            Cursor cursor = duongSQLite.getDatabase().query("diem_hoc_tap", null, "msv=?", s, null, null, null);
             cursor.moveToFirst(); // di chuyển con trỏ đến dòng đầu tiền trong bảng
             int item = cursor.getColumnIndex("item");
             while (!cursor.isAfterLast()) {
                 String jsonDiemHocTap = cursor.getString(item);
                 DiemHocTap diemHocTap = gson.fromJson(jsonDiemHocTap, DiemHocTap.class);
                 diemHocTaps.add(diemHocTap);
+                cursor.moveToNext();
             }
             closeDatabases();
             return diemHocTaps;

@@ -1,19 +1,15 @@
 package com.lhd.fm;
 
 import android.annotation.SuppressLint;
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -21,7 +17,6 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.lhd.db.DuLieu;
-import com.lhd.obj.SinhVien;
 import com.lhd.tophaui.R;
 
 import java.util.ArrayList;
@@ -34,20 +29,12 @@ import static duong.Conections.isOnline;
  */
 
 public abstract class Frame extends Fragment {
-    public static final String KEY_OBJECT = "send_object";
-    public static final String KEY_ACTIVITY = "key_start_activity";
     protected RecyclerView recyclerView;
     protected TextView tVnull;
     protected ProgressBar progressBar;
-    protected LinearLayout toolbar;
-    private WebView webView;
-    private  AlertDialog.Builder builder;
-    private View viewAd;
     protected PullRefreshLayout pullRefresh;
-    protected SinhVien sv;
     protected ArrayList<Object> objects;
     protected DuLieu dulieu;
-
     public void loadNativeExpressAt( NativeExpressAdView nativeExpressAdView) {
         if (isOnline(getActivity()))
         nativeExpressAdView.loadAd(new AdRequest.Builder().build());
@@ -108,32 +95,6 @@ public abstract class Frame extends Fragment {
         recyclerView.setVisibility(View.GONE);
     }
     public void loadData() {
-//        if (!MainActivity.wifiIsEnable(getActivity())&&MainActivity.isOnline(getActivity())){
-//            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity());
-//            builder.setTitle("Cảnh báo !");
-//            builder.setMessage("Bạn đang sử dụng dữ liệu di động.\n" +
-//                    "Tránh tiêu tốn dữ liệu.\nTôi khuyên bạn nên dùng mạng wifi để sử dụng.");
-//            builder.setPositiveButton("Bật wifi", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    dialogInterface.dismiss();
-//                    WifiManager wifiManager = (WifiManager)getActivity().getSystemService(Context.WIFI_SERVICE);
-//                    if (!MainActivity.wifiIsEnable(getActivity())) wifiManager.setWifiEnabled(true);
-//                    Toast.makeText(getActivity(), "Đã bật wifi", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            builder.setNegativeButton("Tiếp tục", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialogInterface, int i) {
-//                    dialogInterface.dismiss();
-//                    if (MainActivity.isOnline(getContext())){
-//                        showProgress();
-//                        startParser();
-//                    }else cantLoadData();
-//                }
-//            });
-//            builder.show();
-//        }
         if (isOnline(getContext())){
             showProgress();
             startParser();
@@ -156,11 +117,10 @@ public abstract class Frame extends Fragment {
     public void initView(View view) {
         pullRefresh= (PullRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         dulieu=new DuLieu(getContext());
-//        try {sv= (SinhVien) getArguments().getSerializable(MainActivity.SINH_VIEN);
-//        }catch (NullPointerException e){}
         progressBar= (ProgressBar) view.findViewById(R.id.pg_loading);
         tVnull= (TextView) view.findViewById(R.id.text_null);
         recyclerView= (RecyclerView) view.findViewById(R.id.recle_view);
+        recyclerView.setBackgroundColor(getResources().getColor(R.color.bg_rcv));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         checkDatabase();
     }
@@ -169,13 +129,6 @@ public abstract class Frame extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
     }
-    public ListActivity getListActivity() {
-        return listActivity;
-    }
-    public void setListActivity(ListActivity listActivity) {
-        this.listActivity = listActivity;
-    }
-    private ListActivity listActivity;
     public abstract void setRecyclerView();
     public abstract void checkDatabase();
     public void showRecircleView() {

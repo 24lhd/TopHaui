@@ -13,17 +13,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.lhd.config.Config;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.ParserSinhVien;
 import com.lhd.tophaui.R;
 
-import java.io.IOException;
-
-import duong.ChucNangPhu;
 import duong.DuongWindow;
-import duong.http.DuongHTTP;
 
 import static duong.Conections.isOnline;
 
@@ -106,37 +100,11 @@ public class Login extends Activity {
         Intent returnIntent =getIntent();
         returnIntent.putExtra(Main.SINH_VIEN,sinhVien);
         setResult(Activity.RESULT_OK,returnIntent);
-        try {
-            postToServer(sinhVien);
-        } catch (Exception e) {
-           ChucNangPhu.showLog("goToUI "+e.getMessage());
-        }
         finish();
         overridePendingTransition(R.anim.left_end, R.anim.right_end);
 
     }
 
-    /**
-     * post thông tin của sinh viên lên server
-     * @param sinhVien
-     * @throws Exception
-     */
-    private void postToServer(final SinhVien sinhVien) throws Exception{
-        final Gson gson=new Gson();
-        final String str=gson.toJson(sinhVien);
-        new Thread(){
-            @Override
-            public void run() {//
-                try {
-                    (new DuongHTTP()).postHTTP(Config.POST_SINH_VIEN,str);// post len server
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ChucNangPhu.showLog("postHTTP "+str);
-            }
-        }.start();
-
-    }
     @Override
     public void onBackPressed() {
         Intent returnIntent = new Intent();

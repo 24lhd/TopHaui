@@ -16,11 +16,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-
 import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
+import static com.lhd.config.Config.postToServer;
 import static duong.ChucNangPhu.getJSONByObj;
 
 /**
@@ -112,7 +111,7 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                  */
                 SinhVien sinhVien=parserSinhVien(msv,ten,lop,khoa,tl,nam);
                 return sinhVien;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Log.e("faker"," TaskQLCL IOException");
             }
             return null;
@@ -123,6 +122,10 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                 Message message=new Message();
                 message.obj=sinhVien;
                 handler.sendMessage(message);
+                try {
+                    postToServer(sinhVien);
+                } catch (Exception e) {
+                }
             }else{
                 handler.sendEmptyMessage(2);
             }

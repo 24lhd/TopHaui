@@ -7,14 +7,19 @@ import com.lhd.activity.Main;
 import com.lhd.adaptor.ListSinhVien;
 import com.lhd.obj.SinhVien;
 import com.lhd.task.GetJSONByLink;
+
 import java.util.ArrayList;
+
 import duong.ChucNangPhu;
+import duong.Conections;
+
+import static com.lhd.activity.Main.ADS_INDEX_ITEM;
 
 /**
  * Created by D on 16/03/2017.
  */
 
-public class Top extends Frame {
+public class TopCacLoai extends Frame {
     private ArrayList<SinhVien> sinhViens;
     private Handler handler=new Handler(){
         @Override
@@ -24,7 +29,9 @@ public class Top extends Frame {
                 if(json!=null){
                     ChucNangPhu.showLog("json!=null " +json);
                     dulieu.insertDataTop(id_tab,json);
-                    setRecyclerView();
+                    geted=true;
+                    checkDatabase();
+                    showRecircleView();
                 }else showTextNull();
             }catch (NullPointerException e){
                 startParser();
@@ -33,30 +40,36 @@ public class Top extends Frame {
     };
     private String urlAPI;
     private String id_tab;
+    private boolean geted;
 
     @Override
     protected void startParser() {
+        showProgress();
         GetJSONByLink getJSONByLink=new GetJSONByLink(handler);
         getJSONByLink.execute(urlAPI);
     }
 
     @Override
     public void setRecyclerView() {
+        showRecircleView();
         ArrayList<Object> objects=new ArrayList<>();
         objects.addAll(sinhViens);
-        ListSinhVien listSinhVien=new ListSinhVien(recyclerView,objects,null,11,(Main) getActivity());
+        ListSinhVien listSinhVien=new ListSinhVien(recyclerView,objects,null,ADS_INDEX_ITEM,(Main) getActivity(),sinhViens);
         recyclerView.setAdapter(listSinhVien);
     }
 
     @Override
     public void checkDatabase() {
-         urlAPI=getArguments().getString(Main.LINK_TOP);
+        showProgress();
+        urlAPI=getArguments().getString(Main.LINK_TOP);
         id_tab=getArguments().getString(Main.ID_TAB);
+        if (Conections.isOnline(getActivity())&&geted==false){
+            startParser();
+            return;
+        }
         sinhViens=dulieu.getTopSinhVienTabTopByIdTab(id_tab);
         if (sinhViens!=null){
-//            for (SinhVien sinhVien:sinhViens) {
-//            }
-            ChucNangPhu.showLog("size "+sinhViens.size());
+            ChucNangPhu.showLog("sinhViens "+sinhViens.size());
             setRecyclerView();
         }else  loadData();
     }

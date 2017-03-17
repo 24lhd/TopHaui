@@ -31,7 +31,7 @@ import duong.Conections;
  * Created by D on 12/03/2017.
  */
 
-public class FrameTop extends Fragment{
+public class FrameTopCacLoai extends Fragment{
     private LayoutInflater inflater;
     private View rootView;
     private Main main;
@@ -102,8 +102,9 @@ public class FrameTop extends Fragment{
     private void setViewOnline() {
         linearLayout.setVisibility(View.VISIBLE);
         tvOff.setVisibility(View.GONE);
-        tabLayout.getTabAt(0).select();
-        mViewPager.setCurrentItem(0);
+            tabLayout.getTabAt(0).select();
+            mViewPager.setCurrentItem(0);
+
     }
     public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
         public SectionsPagerAdapter(android.support.v4.app.FragmentManager fm) {
@@ -111,36 +112,36 @@ public class FrameTop extends Fragment{
         }
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            Top topFragment = new Top();
+            TopCacLoai topCacLoaiFragment = new TopCacLoai();
             Bundle bundle=new Bundle();
             if (content.contains(Main.KEY_TOP_HE)){
                 He he=hes.get(position);
                 bundle.putString(Main.LINK_TOP, Config.getLinkTopHe(he.getMahe(),he.getNam()));
                 bundle.putString(Main.ID_TAB, he.getMahe()+he.getNam());
-                topFragment.setArguments(bundle);
-                return topFragment;
+                topCacLoaiFragment.setArguments(bundle);
+                return topCacLoaiFragment;
             }else if (content.contains(Main.KEY_TOP_NGANH)){
                 Nganh nganh=nganhs.get(position);
                 bundle.putString(Main.LINK_TOP, Config.getLinkTopNganh(nganh.getManganh(),nganh.getNam()));
                 bundle.putString(Main.ID_TAB, nganh.getManganh()+nganh.getNam());
-                topFragment.setArguments(bundle);
-                return topFragment;
+                topCacLoaiFragment.setArguments(bundle);
+                return topCacLoaiFragment;
             }else if (content.contains(Main.KEY_TOP_KHOA)){
                 Khoa khoa=khoas.get(position);
                 bundle.putString(Main.LINK_TOP, Config.getLinkTopKhoa(khoa.getKhoa(),khoa.getNbatdau(),khoa.getNam()));
                 bundle.putString(Main.ID_TAB, khoa.getKhoa()+khoa.getNbatdau()+khoa.getNam());
-                topFragment.setArguments(bundle);
-                return topFragment;
+                topCacLoaiFragment.setArguments(bundle);
+                return topCacLoaiFragment;
             }
             else if (content.contains(Main.KEY_TOP_LOP)){
                 Lop lop=lops.get(position);
                 bundle.putString(Main.LINK_TOP, Config.getLinkTopLop(lop.getLop(),lop.getKhoa()));
                 ChucNangPhu.showLog(Config.getLinkTopLop(lop.getLop(),lop.getKhoa()));
                 bundle.putString(Main.ID_TAB, lop.getLop()+lop.getKhoa());
-                topFragment.setArguments(bundle);
-                return topFragment;
+                topCacLoaiFragment.setArguments(bundle);
+                return topCacLoaiFragment;
             }
-            return topFragment;
+            return topCacLoaiFragment;
         }
         @Override
         public int getCount() {

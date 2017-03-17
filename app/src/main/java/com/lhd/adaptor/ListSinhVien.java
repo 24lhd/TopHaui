@@ -12,6 +12,7 @@ import com.lhd.activity.Main;
 import com.lhd.obj.SinhVien;
 import com.lhd.tophaui.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import duong.adaptor.AdaptorResycleViewADS;
@@ -21,6 +22,7 @@ import duong.adaptor.AdaptorResycleViewADS;
  */
 
 public class ListSinhVien extends AdaptorResycleViewADS {
+    private final ArrayList<SinhVien> sinhViens;
     private  Main activity;
     private List<Object> listObject;
     class NativeExpressAdViewHolder extends ViewHolderB {
@@ -50,12 +52,13 @@ public class ListSinhVien extends AdaptorResycleViewADS {
         }
     }
     public ListSinhVien(RecyclerView recyclerView,
-                           List<Object> listObject,
-                           Object doiTuongCanThem,
-                           int viTriThem, Main activity) {
+                        List<Object> listObject,
+                        Object doiTuongCanThem,
+                        int viTriThem, Main activity, ArrayList<SinhVien> sinhViens) {
         super(recyclerView, listObject, doiTuongCanThem, viTriThem);
         this.listObject = listObject;
         this.activity = activity;
+        this.sinhViens = sinhViens;
     }
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -79,9 +82,9 @@ public class ListSinhVien extends AdaptorResycleViewADS {
     public void setViewHolderA( ViewHolderA viewHolder, int position) {
         SinhVienHover sinhVienHover= (SinhVienHover) viewHolder;
         final SinhVien sinhVien= (SinhVien) getListObject().get(position);
-        sinhVienHover.id_stt.setText(""+(listObject.indexOf(sinhVien)+1));
+        sinhVienHover.id_stt.setText(""+(sinhViens.indexOf(sinhVien)+1));
         sinhVienHover.id_ten_sv.setText(sinhVien.getTen());
-        sinhVienHover.id_lop.setText(sinhVien.getLop());
+        sinhVienHover.id_lop.setText("Lớp "+sinhVien.getLop());
         sinhVienHover.id_msv.setText("["+sinhVien.getMa()+"]");
         sinhVienHover.id_khoa.setText(sinhVien.getKhoa());
         sinhVienHover.id_tl.setText(sinhVien.getTl());
@@ -89,7 +92,7 @@ public class ListSinhVien extends AdaptorResycleViewADS {
         sinhVienHover.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LayoutInflater layoutInflater=LayoutInflater.from(activity);
+                activity.setViewSinhVien(sinhVien);
 
             }
         });

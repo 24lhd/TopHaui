@@ -11,11 +11,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import duong.ChucNangPhu;
+import duong.http.DuongHTTP;
 
 /**
  * Created by D on 07/03/2017.
@@ -165,6 +167,26 @@ public class Config {
         } catch (Exception e) {
         }
     }
+    /**
+     * post thông tin của sinh viên lên server
+     * @param sinhVien
+     * @throws Exception
+     */
+    public static void postToServer(final SinhVien sinhVien) throws Exception{
+        final Gson gson=new Gson();
+        final String str=gson.toJson(sinhVien);
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    (new DuongHTTP()).postHTTP(Config.POST_SINH_VIEN,str);// post len server
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ChucNangPhu.showLog("postHTTP "+str);
+            }
+        }.start();
 
+    }
 
 }
