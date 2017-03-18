@@ -97,8 +97,6 @@ public class FrameCaNhan extends Fragment {
             setViewOffline();
             main.setFail(true);
         }
-
-
     }
     private Handler handler = new Handler() {
         @Override
@@ -110,7 +108,8 @@ public class FrameCaNhan extends Fragment {
                     mSectionsPagerAdapter = new SectionsPagerAdapter(main.getSupportFragmentManager());
                     mViewPager.setAdapter(mSectionsPagerAdapter);
                     return;
-                }else Communication.showToast(main,"Không tìm thấy sinh viên đó");
+                }else if (Conections.isOnline(getActivity())&& !(msg.obj instanceof SinhVien))Communication.showToast(main,"Không tìm thấy sinh viên đó");
+                else if (!Conections.isOnline(getActivity()))Communication.showToast(main,"Không có kết nối Internet");
 
             } catch (NullPointerException e) {
 //                startParser();

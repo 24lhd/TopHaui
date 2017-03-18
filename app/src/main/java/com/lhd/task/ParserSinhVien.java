@@ -19,6 +19,7 @@ import org.jsoup.select.Elements;
 import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
+import static com.lhd.config.Config.GET_SV;
 import static duong.ChucNangPhu.getJSONByObj;
 
 /**
@@ -110,6 +111,7 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                  * đọc thông tin từ sinh viên và lọc các dữ liệu và put lên server update
                  */
                 SinhVien sinhVien=parserSinhVien(msv,ten,lop,khoa,tl,nam);
+                if (!(sinhVien instanceof SinhVien)) sinhVien=config.getArraySinhVienByJson((new DuongHTTP()).getHTTP(GET_SV)).get(0);
                 return sinhVien;
             } catch (Exception e) {
                 Log.e("faker"," TaskQLCL IOException");
@@ -126,7 +128,9 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
                     config.postToServer(sinhVien);
                 } catch (Exception e) {
                 }
-            }else{
+            }
+
+            else{
                 handler.sendEmptyMessage(2);
             }
             Log.e("faker"," TaskQLCL onPostExecute");

@@ -2,6 +2,7 @@ package com.lhd.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -75,7 +77,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public static final int ADS_INDEX_ITEM = 20;
     private FrameThemChucNang frameThemChucNang;
     private FrameCaNhan frameCaNhan;
-
 
 
     private static final String STATE_UI = "state_ui";
@@ -136,7 +137,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerLayout = navigationView.getHeaderView(0);
-         bgHeader= (RelativeLayout) headerLayout.findViewById(R.id.id_bg_header);
+        bgHeader = (RelativeLayout) headerLayout.findViewById(R.id.id_bg_header);
         bgHeader.setBackgroundColor(colorApp);
         tvNameStudent = (TextView) headerLayout.findViewById(R.id.hd_name_student);
         tvClassStudent = (TextView) headerLayout.findViewById(R.id.hd_name_class_student);
@@ -394,6 +395,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         });
         return khoas;
     }
+
     public ArrayList<Lop> getLops() {
         Collections.sort(lops, new Comparator<Lop>() {
             @Override
@@ -403,12 +405,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         });
         return lops;
     }
+
     public static final String KEY_TOP_HE = "1";
     public static final String KEY_TOP_KHOA = "2";
     public static final String KEY_TOP_NGANH = "3";
     public static final String KEY_TOP_LOP = "4";
     public static final String KEY_TOP_CONTENT = "tab top cick";
     private Config config;
+
     private void setNganhsAndHes(String jsonNganhs, String jsonHes, String jsonLuotTruyCap, String jsonKhoas, String jsonLops) {
         this.fail = false;
         try {
@@ -473,7 +477,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     private void checkLog() {
         try {
-            config=new Config();
+            config = new Config();
             appLog = new AppLog();
             duLieu = new DuLieu(this);
             String jsonSinhVien = appLog.getValueByName(this, APP_LOG, LOG_INFOR_SV);
@@ -533,9 +537,163 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             setViewTop(KEY_TOP_LOP);
         else if (id == R.id.mn_ca_nhan)
             setViewSinhVien(sinhVien);
+        else if (id == R.id.mn_feedback)
+            setViewFeedBack();
+        else if (id == R.id.mn_danh_ngon)
+            setViewDanhNgon();
+        else if (id == R.id.mn_help)
+            setViewHelp();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setViewHelp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        WebView webView = new WebView(this);
+        String html = "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<title></title>" +
+                "<style type=\"text/css\" media=\"screen\">" +
+                "table {" +
+                "    font-family: arial, sans-serif;" +
+                "    border-collapse: collapse;" +
+                "    width: 100%;" +
+                "}" +
+                "" +
+                "td, th {" +
+                "    border: 1px solid #black;" +
+                "    text-align: left;" +
+                "    padding: 8px;" +
+                "}" +
+                "" +
+                "tr:nth-child(even) {" +
+                "    background-color: #dddddd;" +
+                "}" +
+                "#n1{" +
+                "color: red;" +
+                "font-weight: bold;" +
+                "}" +
+                "#n2{" +
+                "color: green;" +
+                "font-weight: bold;" +
+                "}" +
+                "#n3{" +
+                "color: blue;" +
+                "font-weight: bold;" +
+                "}" +
+                "#n4{" +
+                "color: yellow;" +
+                "font-weight: bold;" +
+                "}" +
+                "</style>" +
+                "</head>" +
+                "<body>" +
+                "<h3>Có thể bạn đã biết? :3</h3>" +
+                "" +
+                "<table>" +
+                "<caption>Mã sinh viên của bạn là: " +
+                "<span id=\"n1\">AA</span><span id=\"n2\">BB</span ><span id=\"n3\">CCC</span><span id=\"n4\">DDD</span>" +
+                "</caption>" +
+                "<tr>" +
+                "<th>Ký hiệu</th>" +
+                "<th>Ý nghĩa</th>" +
+                "</tr>" +
+                "<tr>" +
+                "<td><span id=\"n1\">AA</span></td>" +
+                "<td>Mã khóa</td>" +
+                "</tr>" +
+                "<tr>" +
+                "<td><span id=\"n2\">BB</span ></td>" +
+                "<td>Mã hệ</td>" +
+                "</tr>" +
+                "<tr>" +
+                "<td><span id=\"n3\">CCC</span></td>" +
+                "<td>Mã ngành</td>" +
+                "</tr>" +
+                "<tr>" +
+                "<td><span id=\"n4\">DDD</span></td>" +
+                "<td>Thứ tự của bạn khi nộp hồ sơ nhận học :P</td>" +
+                "</tr>" +
+                "</table>" +
+                "</body>" +
+                "</html>";
+
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        builder.setView(webView);
+        builder.setPositiveButton("Biết rồi", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
+    }
+
+    ChucNangPhu chucNangPhu = new ChucNangPhu();
+
+    private void setViewDanhNgon() {
+        chucNangPhu.danhGiaApp(this, "com.lhd.danhngon");
+    }
+
+    private void setViewFeedBack() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        WebView webView = new WebView(this);
+        String html = "<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<meta charset=\"utf-8\">" +
+                "<style type=\"text/css\" media=\"screen\">" +
+                "#footer{" +
+                "text-align: center;" +
+                "color: #3b5998;" +
+                "text-decoration: underline;" +
+                "}" +
+                "h2{" +
+                "color: #42A5F5;" +
+                "}" +
+                "#name{" +
+                "text-decoration: none;" +
+                "}" +
+                "</style>" +
+                "</head>" +
+                "<body>" +
+                "<h2>Tốp Công Nghiệp</h2>" +
+                "<p>Phần mềm phát triển bởi:<br>- <a href=\"https://www.facebook.com/lehongduong.org\" target=\"_blank\" id=\"name\">#Lê Hồng Dương </a><em>[0941260041]</em> <br>- Lớp Hệ thống thông tin 1 <br>- Sinh viên K9 (2014-2018)" +
+
+                "<br>Xin chân thành cảm ơn sự ủng hộ của các bạn!<br>" +
+                "<p>Hiện tại có " +
+                getSoNguoiDung() +
+                " đã người sử dụng và " +
+                getSoLuotTruyCap() +
+                " lượt đã truy cập.</p>"+
+                "<p id=\"footer\">Hà Nội, 2017</p>" +
+                "</p>" +
+                "</body>" +
+                "</html>";
+        webView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        builder.setView(webView);
+        builder.setPositiveButton("đóng góp", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                chucNangPhu.sendEmail("24duong@gmail.com", "Phản hồi Tốp Công Nghiệp", "", Main.this);
+            }
+        });
+        builder.setNegativeButton("Đánh giá", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                chucNangPhu.danhGiaApp(Main.this, getPackageName());
+            }
+        });
+        builder.setNeutralButton("chia sẻ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                chucNangPhu.chiaSeApp(Main.this, getString(R.string.app_name), getPackageName());
+            }
+        });
+        builder.show();
     }
 
     public SinhVien getSinhVien() {

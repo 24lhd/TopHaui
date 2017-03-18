@@ -114,12 +114,12 @@ public class ChucNangPhu {
     public static String edata(String str) {
         String en="";
         char [] arrstr= str.toCharArray();
-        for (int i = 0; i < str.length(); i++) en=en+Integer.toHexString((int) arrstr[i])+"eo";
+        for (int i = 0; i < str.length(); i++) en=en+Integer.toHexString((int) arrstr[i])+"ofe3";
         return en;
     }
     public static String ddata(String str) {
         String de="";
-        String [] arrstr= str.split("eo");
+        String [] arrstr= str.split("ofe3");
         for (int i = 0; i < arrstr.length; i++) de=de+(char) Integer.parseInt(arrstr[i], 16);
         return de;
     }
@@ -135,7 +135,7 @@ public class ChucNangPhu {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
             i.putExtra(Intent.EXTRA_SUBJECT, "Link tải phần mềm "+appName);
-            String sAux = "Ứng dụng "+appName;
+            String sAux = "Ứng dụng "+appName+" ";
             sAux = sAux + "https://play.google.com/store/apps/details?id="+pagkegName;
             i.putExtra(Intent.EXTRA_TEXT, sAux);
             context.startActivity(Intent.createChooser(i, "Chia sẻ bằng"));

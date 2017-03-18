@@ -25,8 +25,6 @@ public class GetAllSinhVien {
                     if (i<10) msv="00"+i;
                     else if (i<100) msv="0"+i;
                     else msv=""+i;
-//                            Log.e("faker",""+index++);
-//                            Log.e("faker",""+khoa+""+he+nganh+msv);
                     String ma=""+khoa+""+he+nganh+msv;
                     String link="https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-bat-buoc?action=p1&p=1&ps=500&exp=rownb&dir=1&s=" +
                             ma+

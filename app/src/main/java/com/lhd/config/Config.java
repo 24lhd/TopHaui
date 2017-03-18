@@ -34,11 +34,12 @@ public class Config {
     public static final String GET_NGANH = "https://topcongnghiep.herokuapp.com/api/nganh";
     public static final String GET_LUOT_TRUY_CAP = "https://topcongnghiep.herokuapp.com/api/luottruycap";
     public static final String GET_KHOA = "https://topcongnghiep.herokuapp.com/api/khoa";
-    public static final String GET_LOP = "https://topcongnghiep.herokuapp.com/api/lop";
-
     public  String getLinkMonHocBatBuoc(String msv) {
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-bat-buoc?action=p1&p=1&ps=500&exp=rownb&dir=1&s=" + msv;
     }
+
+    public static final String GET_LOP = "https://topcongnghiep.herokuapp.com/api/lop";
+    public static final String GET_SV = "https://topcongnghiep.herokuapp.com/api/sv/";
 
     public  String getLinkMonHocConThieu(String msv) {
         return "https://dttc.haui.edu.vn/vn/s/sinh-vien/bang-mon-con-thieu?action=p3&p=1&ps=500&exp=SubjectName&dir=1&s=" + msv;
@@ -68,6 +69,7 @@ public class Config {
     public  String getLinkTopLop(String lop,String khoa ) {
             return "https://topcongnghiep.herokuapp.com/api/toplop/"+urlencode(lop)+"/"+urlencode(khoa);
     }
+
     public  String urlencode(String original) {
         try {
             return URLEncoder.encode(original, "utf-8").replace("+", "%20").replace("*", "%2A").replace("%7E", "~");}
@@ -159,13 +161,6 @@ public class Config {
         } catch (JSONException e) {
         }
         return null;
-    }
-
-    public  void getSinhVienByJson(String jsonSinhVien) {
-        try {
-
-        } catch (Exception e) {
-        }
     }
     /**
      * post thông tin của sinh viên lên server
