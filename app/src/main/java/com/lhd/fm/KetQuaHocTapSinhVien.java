@@ -12,8 +12,6 @@ import com.lhd.task.ParserSinhVien;
 
 import java.util.ArrayList;
 
-import duong.ChucNangPhu;
-
 import static com.lhd.activity.Main.SINH_VIEN;
 import static duong.Conections.isOnline;
 
@@ -55,7 +53,6 @@ public class KetQuaHocTapSinhVien extends Frame {
     public void setRecyclerView() {
         ArrayList<Object> objects = new ArrayList<>();
         objects.addAll(diemHocTaps);
-        ChucNangPhu.showLog("diemHocTaps  setRecyclerView"+diemHocTaps.size());
         ListDiemHocTap listDiemHocTap = new ListDiemHocTap(recyclerView, objects, null,Main.ADS_INDEX_ITEM, (Main) getActivity(), diemHocTaps);
         recyclerView.setAdapter(listDiemHocTap);
         showRecircleView();
@@ -76,14 +73,12 @@ public class KetQuaHocTapSinhVien extends Frame {
     class LoadData extends AsyncTask<Void,Void,Void> {
         @Override
         protected Void doInBackground(Void... params) {
-
             diemHocTaps = dulieu.getListDiemHocTap(msv);
             return null;
         }
         @Override
         protected void onPostExecute(Void aVoid) {
             if (diemHocTaps != null) {
-                ChucNangPhu.showLog("diemHocTaps " + diemHocTaps.size());
                 setRecyclerView();
             } else loadData();
         }

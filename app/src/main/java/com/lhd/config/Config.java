@@ -178,7 +178,6 @@ public class Config {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                ChucNangPhu.showLog("postHTTP "+str);
             }
         }.start();
 

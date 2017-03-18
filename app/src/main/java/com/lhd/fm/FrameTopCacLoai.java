@@ -135,7 +135,6 @@ public class FrameTopCacLoai extends Fragment{
             else if (content.contains(Main.KEY_TOP_LOP)){
                 Lop lop=lops.get(position);
                 bundle.putString(Main.LINK_TOP,  main.getConfig().getLinkTopLop(lop.getLop(),lop.getKhoa()));
-                ChucNangPhu.showLog( main.getConfig().getLinkTopLop(lop.getLop(),lop.getKhoa()));
                 bundle.putString(Main.ID_TAB, lop.getLop()+lop.getKhoa());
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;

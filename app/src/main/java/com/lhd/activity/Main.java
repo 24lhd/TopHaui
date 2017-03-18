@@ -790,7 +790,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     public void setViewSinhVien(SinhVien sinhVien) {
-        ChucNangPhu.showLog("setViewSinhVien " + sinhVien.toString());
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putSerializable(SINH_VIEN, sinhVien);

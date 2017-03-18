@@ -16,7 +16,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
 import static com.lhd.config.Config.GET_SV;
@@ -48,7 +47,6 @@ public class ParserSinhVien extends AsyncTask<String, Void,SinhVien>{
             Document docLinkMonHocConThieu = null;
             Document docLinkMonHocTuChon = null;
             try {
-                ChucNangPhu.showLog("msv "+config.getLinkMonHocBatBuoc(params[0]));
                 docMonHocBatBuoc = Jsoup.connect(config.getLinkMonHocBatBuoc(params[0])).get();
                 docLinkMonHocConThieu = Jsoup.connect(config.getLinkMonHocConThieu(params[0])).get();
                 docLinkMonHocTuChon = Jsoup.connect(config.getLinkMonHocTuChon(params[0])).get();

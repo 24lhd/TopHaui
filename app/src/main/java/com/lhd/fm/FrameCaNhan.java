@@ -23,7 +23,6 @@ import com.lhd.obj.SinhVien;
 import com.lhd.task.ParserSinhVien;
 import com.lhd.tophaui.R;
 
-import duong.ChucNangPhu;
 import duong.Communication;
 import duong.Conections;
 
@@ -102,7 +101,6 @@ public class FrameCaNhan extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             try {
-//                SinhVien sinhVien = (SinhVien) msg.obj;
                 if (msg.obj instanceof SinhVien) {
                     sinhVien= (SinhVien) msg.obj;
                     mSectionsPagerAdapter = new SectionsPagerAdapter(main.getSupportFragmentManager());
@@ -154,7 +152,6 @@ public class FrameCaNhan extends Fragment {
             if (position == 2) {
                 TopCacLoai topCacLoaiFragment = new TopCacLoai();
                 bundle.putString(Main.LINK_TOP, main.getConfig().getLinkTopLop(sinhVien.getLop(),sinhVien.getKhoa()));
-                ChucNangPhu.showLog(main.getConfig().getLinkTopLop(sinhVien.getLop(),sinhVien.getKhoa()));
                 bundle.putString(Main.ID_TAB, sinhVien.getLop()+sinhVien.getKhoa());
                 topCacLoaiFragment.setArguments(bundle);
                 return topCacLoaiFragment;

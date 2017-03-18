@@ -11,7 +11,6 @@ import com.lhd.task.GetJSONByLink;
 
 import java.util.ArrayList;
 
-import duong.ChucNangPhu;
 import duong.Conections;
 
 import static com.lhd.activity.Main.ADS_INDEX_ITEM;
@@ -28,7 +27,6 @@ public class TopCacLoai extends Frame {
             try{
                 String json= (String) msg.obj;
                 if(json!=null){
-                    ChucNangPhu.showLog("json!=null " +json);
                     dulieu.insertDataTop(id_tab,json);
                     geted=true;
                     checkDatabase();

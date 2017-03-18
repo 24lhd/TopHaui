@@ -18,7 +18,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
 import static duong.ChucNangPhu.getJSONByObj;
@@ -81,7 +80,6 @@ public class Test extends Activity {
 
                 String str=gson.toJson(parserSinhVien(msv,ten,lop,khoa,tl,nam));
                 duongHTTP.putHTTP("https://topcongnghiep.herokuapp.com/update/"+msv,str);
-                ChucNangPhu.showLog("xxxxxxx "+str);
                 /**
                  * lấy thông tin kết quả học tập ở docMonHocBatBuoc
                  */
@@ -159,7 +157,6 @@ public class Test extends Activity {
         String mahe = cut[3] + cut[4] + "";
          nam = nam.replace("Sinh viên năm:", "").trim();
          tl = tl.replace("Điểm TBC TL:", "").trim();
-        ChucNangPhu.showLog((new SinhVien(msv,ten,lop,k,tl,nam,nbatdau,nketthuc,mahe,manganh,khoa)).toString());
         return new SinhVien(msv,ten,lop,k,tl,nam,nbatdau,nketthuc,mahe,manganh,khoa);
     }
 

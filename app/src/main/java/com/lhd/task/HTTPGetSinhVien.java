@@ -10,7 +10,6 @@ import com.lhd.obj.SinhVien;
 
 import org.json.JSONObject;
 
-import duong.ChucNangPhu;
 import duong.http.DuongHTTP;
 
 /**
@@ -30,8 +29,6 @@ private DuongHTTP duongHTTP;
         try {
 
             JSONObject jsonObject=new JSONObject(duongHTTP.getHTTP(Config.LINK_GET_INFOR_SV+strings[0]));
-            jsonObject.getString("");
-            ChucNangPhu.showLog(jsonObject.toString());
         } catch (Exception e) {}
         return null;
     }

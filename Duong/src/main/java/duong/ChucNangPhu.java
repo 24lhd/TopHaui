@@ -49,23 +49,16 @@ public class ChucNangPhu {
         final String fileName = appName;
         destination += fileName;
         final Uri uri = Uri.parse("file://" + destination);
-        //Delete update file if exists
         File file = new File(destination);
         if (file.exists())
-            //file.delete() - test this, I think sometimes it doesnt work
             file.delete();
-        //get url of app on server
         String url = urlApp;
-        //set downloadmanager
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDescription(content);
         request.setTitle(title);
-        //set destination
         request.setDestinationUri(uri);
-        // get download service and enqueue file
         DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
         long downloadId = manager.enqueue(request);
-        //set BroadcastReceiver to install app when .apk is downloaded
         BroadcastReceiver onComplete = new BroadcastReceiver() {
             public void onReceive(Context ctxt, Intent intent) {
                 Intent install = new Intent(Intent.ACTION_VIEW);
@@ -76,7 +69,6 @@ public class ChucNangPhu {
                 activity.finish();
             }
         };
-        //register receiver for when .apk download is compete
         activity.registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
@@ -109,7 +101,7 @@ public class ChucNangPhu {
         }
     }
     public static void showLog(String log) {
-        Log.e("faker",log);
+        Log.e("Lê Hồng Dương",log);
     }
     public static String edata(String str) {
         String en="";
